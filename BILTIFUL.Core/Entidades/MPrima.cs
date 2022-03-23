@@ -44,7 +44,7 @@ namespace BILTIFUL.Core.Entidades
         }
         public string Dados()
         {
-            return "\t\t\t\t\t-------------------------------------------\n\t\t\t\t\tId: MP" + Id.ToString().PadLeft(4, '0') + "\n\t\t\t\t\tNome: " + Nome + "\n\t\t\t\t\tData de ultima compra: " + UltimaCompra.ToString("dd/MM/yyyy") + "\n\t\t\t\t\tData de cadastro: " + DataCadastro.ToString("dd/MM/yyyy") + "\n\t\t\t\t\tSituação: " + Situacao;
+            return "\t\t\t\t\t-------------------------------------------\n\t\t\t\t\tId: " + Id.ToString().PadLeft(4, '0') + "\n\t\t\t\t\tNome: " + Nome + "\n\t\t\t\t\tData de ultima compra: " + UltimaCompra.ToString("dd/MM/yyyy") + "\n\t\t\t\t\tData de cadastro: " + DataCadastro.ToString("dd/MM/yyyy") + "\n\t\t\t\t\tSituação: " + Situacao;
 
         }
 

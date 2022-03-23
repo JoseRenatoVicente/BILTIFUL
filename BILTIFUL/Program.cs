@@ -11,68 +11,6 @@ namespace BILTIFUL
             CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("pt-BR");
 
             Menu();
-
-            /*ProdutoRepository produtoRepository = new ProdutoRepository();
-            MateriaPrimaRepository materiaPrimaRepository = new MateriaPrimaRepository();
-            FornecedorRepository fornecedorRepository = new FornecedorRepository();
-            ClienteRepository clienteRepository = new ClienteRepository();
-
-            produtoRepository.GetAllProdutos();
-
-            Produto produto = new Produto { CodigoBarras = 789661700005, Nome = "Produto1", ValorVenda = 10, Situacao = Situacao.Ativo, QuantidadeEstoque = 1 };
-
-            produtoRepository.Add(produto);
-            produto.Nome = "produto editado";
-
-            produtoRepository.Update(produto);
-
-            produtoRepository.Remove(produto.CodigoBarras);
-
-            materiaPrimaRepository.GetAllMPrimas();
-
-            MPrima mPrima = new MPrima { Nome="Glicerina"};
-
-            materiaPrimaRepository.Add(mPrima);
-            mPrima.Nome = "Batom";
-
-            materiaPrimaRepository.Update(mPrima);
-
-            materiaPrimaRepository.Remove("MP0001");*/
-
-            /*Fornecedor fornecedor = new Fornecedor { CNPJ = "112121", RazaoSocial = "Empresa 1", DataAbertura=DateTime.Now};
-            fornecedorRepository.Add(fornecedor);
-            fornecedor.RazaoSocial = "Empresa editada";
-
-            fornecedorRepository.Update(fornecedor);
-
-            fornecedorRepository.Remove("112121");*/
-
-            /*Cliente cliente = new Cliente { Nome = "Jose", CPF = "11121213", DataNascimento = DateTime.Parse("2004/03/22") };
-            clienteRepository.GetAllClientes();
-
-            clienteRepository.Add(cliente);
-            cliente.Nome = "Cliente editado";
-
-            clienteRepository.GetAllClientes();
-
-            clienteRepository.Update(cliente);
-
-            clienteRepository.Remove(cliente.CPF);*/
-
-
-
-            /*Repository<MPrima> repository = new Repository<MPrima>("MPrima.dat");
-
-            repository.Add(new MPrima("Teste", Core.Entidades.Enums.Situacao.Inativo));
-
-            foreach (var p in repository.GetAll())
-                Console.WriteLine(p.Dados());
-
-            Console.WriteLine(repository.GetByWhere(c => c.Nome == "teste2").Dados());
-
-            Console.ReadKey();*/
-
-            ;
         }
 
         public static void Menu()
@@ -102,6 +40,7 @@ namespace BILTIFUL
 
                 case "2":
                     Console.Clear();
+                    new CompraService().SubMenu();
                     BackMenu();
                     break;
 

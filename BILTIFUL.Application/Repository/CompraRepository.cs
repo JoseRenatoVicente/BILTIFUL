@@ -23,21 +23,21 @@ namespace BILTIFUL.Application.Repository
         public List<Compra> GetAllCompras()
         {
             return Get("SELECT Id, DataProducao, Produto, Quantidade " +
-                "FROM dbo.Producao");
+                "FROM dbo.Compra");
         }
 
         public List<Compra> GetByData(DateTime dataProducao)
         {
             return Get("SELECT Id, DataCompra, Fornecedor, ValorTotal " +
                 "FROM dbo.Compra " +
-                $"WHERE DataProducao = '{dataProducao}')");
+                $"WHERE DataCompra = '{dataProducao}')");
         }
 
         public List<Compra> GetByFornecedor(string cnpj)
         {
             return Get("SELECT Id, DataCompra, Fornecedor, ValorTotal " +
                 "FROM dbo.Compra " +
-                $"WHERE CNPJ = '{cnpj}')");
+                $"WHERE Fornecedor = '{cnpj}')");
         }
 
         public Compra GetById(int id)
@@ -50,18 +50,20 @@ namespace BILTIFUL.Application.Repository
             return compra;
         }
 
-
         public Compra Add(Compra compra)
         {
             string query = "INSERT INTO Compra" +
      "(Fornecedor, ValorTotal) " +
+     "OUTPUT Inserted.Id "+
     "VALUES(@fornecedor, @valorTotal)";
             var command = CreateCommand(query);
 
             command.Parameters.AddWithValue("@fornecedor", compra.Fornecedor);
             command.Parameters.AddWithValue("@valorTotal", compra.ValorTotal);
 
-            command.ExecuteNonQuery();
+            var reader = command.ExecuteReader();
+            reader.Read();
+            compra.Id = int.Parse(reader["Id"].ToString());
 
             compra.Itens.ForEach(e =>
             {

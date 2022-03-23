@@ -5,12 +5,19 @@ namespace BILTIFUL.Core.Entidades
     public class ItemVenda : EntidadeBase, IEntidadeDataBase<ItemVenda>
     {
         //ID produto
-        public long Produto { get; set; }
+        public string Produto { get; set; }
         public float Quantidade { get; set; }
-        public int ValorUnitario { get; set; }
+        public float ValorUnitario { get; set; }
         public float TotalItem => Quantidade * ValorUnitario;
         public ItemVenda()
         {
+        }
+
+        public ItemVenda(string produto, float quantidade, float valorUnitario)
+        {
+            Produto = produto;
+            Quantidade = quantidade;
+            ValorUnitario = valorUnitario;
         }
 
         public string ConverterParaDAT()
@@ -27,7 +34,6 @@ namespace BILTIFUL.Core.Entidades
             if (line == null) return null;
 
             Id = int.Parse(line.Substring(0, 5));
-            Produto = int.Parse(line.Substring(5, 12));
             Quantidade = float.Parse(line.Substring(17, 3));
             ValorUnitario = int.Parse(line.Substring(20, 5));
 

@@ -36,11 +36,13 @@ namespace BILTIFUL.Application.Repository
         {
             string query = "INSERT INTO ItemCompra" +
                  "(Id, MateriaPrima, Quantidade, ValorUnitario, TotalItem) " +
-                "VALUES(@nome, @valorVenda, @situacao, @quantidadeEstoque)";
+                "VALUES(@id, @materiaPrima, @quantidade, @valorUnitario, @totalItem)";
             var command = CreateCommand(query);
+
 
             command.Parameters.AddWithValue("@id", itemCompra.Id);
             command.Parameters.AddWithValue("@materiaPrima", itemCompra.MateriaPrima);
+            command.Parameters.AddWithValue("@quantidade", itemCompra.Quantidade);
             command.Parameters.AddWithValue("@valorUnitario", itemCompra.ValorUnitario);
             command.Parameters.AddWithValue("@totalItem", itemCompra.TotalItem);
 
@@ -56,7 +58,7 @@ namespace BILTIFUL.Application.Repository
 
                 Id = int.Parse(record["Id"].ToString()),
                 DataCompra = DateTime.Parse(record["DataProducao"].ToString()),
-                MateriaPrima = record["Produto"].ToString(),
+                MateriaPrima = record["MateriaPrima"].ToString(),
                 Quantidade = float.Parse(record["Quantidade"].ToString()),
                 ValorUnitario = float.Parse(record["ValorUnitario"].ToString())
             };

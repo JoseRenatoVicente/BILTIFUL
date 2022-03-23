@@ -1,5 +1,6 @@
 ﻿using BILTIFUL.Core.Entidades.Base;
 using System;
+using System.Collections.Generic;
 
 namespace BILTIFUL.Core.Entidades
 {
@@ -9,10 +10,17 @@ namespace BILTIFUL.Core.Entidades
         //CPF
         public string Cliente { get; set; }
         public float ValorTotal { get; set; }
+        public List<ItemVenda> Itens { get; set; }
 
         public Venda()
         {
 
+        }
+
+        public Venda(string cliente, float valorTotal)
+        {
+            Cliente = cliente;
+            ValorTotal = valorTotal;
         }
 
         public string Dados()

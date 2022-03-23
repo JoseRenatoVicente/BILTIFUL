@@ -389,8 +389,8 @@ namespace BILTIFUL.Application.Service
                 Console.WriteLine("\n\n\t\t\t\t\tMateria-Prima:\t{0}\n\t\t\t\t\tValor Unitario:\t{1}\n\t\t\t\t\tQuantidade:\t{2}\n\t\t\t\t\tTotal Item:\t{3}", idMPrima[i], valorQuantidade[i], quantidade[i], totalItemString[i]);
             }
             Console.Write("\n\t\t\t\t\tConfirmar a compra (S/N): ");
-            string confirmar = Console.ReadLine();
-            if (confirmar == "S")
+            string confirmar = Console.ReadLine().ToLower();
+            if (confirmar == "s" || confirmar =="sim")
             {
                 string valorTotalString = (valorTotal.ToString("F2"));
                 valorTotalString = valorTotalString.Trim().Replace(".", "").Replace(",", "");
