@@ -104,6 +104,27 @@ namespace BILTIFUL.ModuloVenda
                 return;
             }
 
+            bool inativo = false;
+
+            connection.Open();
+            String fornecedorinativo = "SELECT situacao FROM dbo.Cliente where cpf = " + clienteVenda;
+            using (SqlCommand command = new SqlCommand(fornecedorinativo, connection))
+            {
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        if ("I" == reader.GetString(0))
+                            inativo = true;
+                    }
+                }
+            }
+            if (inativo == true)
+            {
+                Console.WriteLine("\t\t\t\t\tFornecedor inativo para compra");
+                return;
+            }
+            connection.Close();
             bool clienteencontrado = false;
             connection.Open();
 

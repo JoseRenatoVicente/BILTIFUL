@@ -90,6 +90,29 @@ namespace BILTIFUL.ModuloCompra
                     return;
                 }
 
+                bool inativo = false;
+
+                connection.Open();
+                String fornecedorinativo = "SELECT situacao FROM dbo.Fornecedor where cnpj = " + cnpj;
+                using (SqlCommand command = new SqlCommand(fornecedorinativo, connection))
+                {
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            if ("I" == reader.GetString(0))
+                                inativo = true;
+                        }
+                    }
+                }
+                connection.Close();
+
+                if (inativo == true)
+                {
+                    Console.WriteLine("\t\t\t\t\tFornecedor inativo para compra");
+                    return;
+                }
+
                 bool fornecedoencontrado = false;
                 connection.Open();
                 String localizafornecedor = "SELECT cnpj, rsocial, ucompra FROM dbo.Fornecedor";

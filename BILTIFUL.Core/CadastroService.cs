@@ -512,6 +512,7 @@ namespace BILTIFUL.Core
                         }
                         connection.Close();
                         break;
+
                     case "2":
                         string cnpj;
                         do
@@ -542,6 +543,7 @@ namespace BILTIFUL.Core
                         }
                         connection.Close();
                         break;
+
                     case "3":
                         Console.Write("\t\t\t\t\tDigite o nome que deseja localizar: ");
                         string nomeMateriaPrima = Console.ReadLine().Trim();
@@ -563,6 +565,7 @@ namespace BILTIFUL.Core
                         }
                         connection.Close();
                         break;
+
                     case "4":
                         Console.Write("\t\t\t\t\tDigite o nome do produto que deseja localizar: ");
                         string nomeProduto = Console.ReadLine().Trim();
@@ -583,63 +586,66 @@ namespace BILTIFUL.Core
                         }
                         connection.Close();
                         break;
-                    /*case "5":
+
+                    case "5":
                         Console.Write("\t\t\t\t\tDigite a data de venda que deseja localizar(dd/mm/aaaa): ");
-                        DateTime dvenda = DateTime.Parse(Console.ReadLine());
-                        List<Venda> localizavenda = cadastros.vendas.FindAll(p => p.DataVenda == dvenda);
-                        if (localizavenda != null)
+                        DateTime datavenda = DateTime.Parse(Console.ReadLine());
+                        connection.Open();
+
+                        String localizavenda = "SELECT id, dvenda, vtotal, cpf_cliente, Produto.nome, qtd, vunitario, titem FROM dbo.Venda join dbo.Item_Venda on Item_Venda.id_venda = Venda.id join Produto on Item_Venda.cbarras_produto = Produto.cbarras where dvenda = '" + datavenda.ToString("yyyy/MM/dd") + "'";
+
+                        using (SqlCommand command = new SqlCommand(localizavenda, connection))
                         {
-                            encontrado = true;
-                            foreach (Venda p in localizavenda)
+                            using (SqlDataReader reader = command.ExecuteReader())
                             {
-                                Console.WriteLine(p.DadosVenda());
-                                Console.WriteLine("\t\t\t\t\tItens: ");
-                                foreach (ItemVenda i in cadastros.itensvenda)
+                                while (reader.Read())
                                 {
-                                    if (i.Id == p.Id)
-                                        Console.WriteLine(i.DadosItemVenda());
+                                    Console.WriteLine("Numero Venda: {0}\nData Venda: {1}\nValor de Venda: {2}\nCPF: cliente: {3}\nProduto: {4}\nQuantidade: {5}\nValor Unitario: {6}\nTotal do item: {7}\n--------------------------------------------------",
+                                        reader.GetString(0), reader.GetDateTime(1).ToString("dd/MM/yyyy"), reader.GetDecimal(2), reader.GetString(3), reader.GetString(4), reader.GetInt32(5), reader.GetDecimal(6), reader.GetDecimal(7));
+                                    encontrado = true;
                                 }
                             }
                         }
+                        connection.Close();
                         break;
                     case "6":
                         Console.Write("\t\t\t\t\tDigite o data de compra que deseja localizar(dd/mm/aaaa): ");
                         DateTime dcompra = DateTime.Parse(Console.ReadLine());
-                        List<Compra> localizacompra = cadastros.compras.FindAll(p => p.DataCompra == dcompra);
-                        if (localizacompra != null)
+                        String localizacompra = "  SELECT Compra.id, dcompra, vtotal, cnpj_fornecedor, MPrima.nome, qtd, vunitario, titem FROM dbo.Compra join dbo.Item_Compra on Item_Compra.id_compra = Compra.id join MPrima on Item_Compra.id_mprima = MPrima.id where dcompra = '" + dcompra.ToString("yyyy/MM/dd") + "'";
+                        connection.Open();
+                        using (SqlCommand command = new SqlCommand(localizacompra, connection))
                         {
-                            encontrado = true;
-                            foreach (Compra p in localizacompra)
+                            using (SqlDataReader reader = command.ExecuteReader())
                             {
-                                Console.WriteLine(p.DadosCompra());
-                                Console.WriteLine("\t\t\t\t\tItens: ");
-                                foreach (ItemCompra i in cadastros.itenscompra)
+                                while (reader.Read())
                                 {
-                                    if (i.Id == p.Id)
-                                        Console.WriteLine(i.DadosItemCompra());
+                                    Console.WriteLine("Numero Compra: {0}\nData Compra: {1}\nValor de compra: {2}\nCNPJ Fornecedor: {3}\nMateria Prima: {4}\nQuantidade: {5}\nValor Unitario: {6}\nTotal do item: {7}\n--------------------------------------------------",
+                                        reader.GetString(0), reader.GetDateTime(1).ToString("dd/MM/yyyy"), reader.GetDecimal(2), reader.GetString(3), reader.GetString(4), reader.GetDecimal(5), reader.GetDecimal(6), reader.GetDecimal(7));
+                                    encontrado = true;
                                 }
                             }
                         }
+                        connection.Close();
                         break;
                     case "7":
                         Console.Write("\t\t\t\t\tDigite o data de produção que deseja localizar(dd/mm/aaaa): ");
                         DateTime dproducao = DateTime.Parse(Console.ReadLine());
-                        List<Producao> localizaproducao = cadastros.producao.FindAll(p => p.DataProducao == dproducao);
-                        if (localizaproducao != null)
+                        String localizaproducao = "  SELECT Producao.id, Producao.dproducao, qtd, Produto.nome, MPrima.nome, qtdmp FROM dbo.Producao join dbo.Item_Producao on Item_Producao.id_producao = Producao.id join Produto on Produto.cbarras = Producao.cbarras_produto join MPrima on Mprima.id = Item_Producao.id_mprima where Producao.dproducao = '" + dproducao.ToString("yyyy/MM/dd") + "'";
+                        connection.Open();
+                        using (SqlCommand command = new SqlCommand(localizaproducao, connection))
                         {
-                            encontrado = true;
-                            foreach (Producao p in localizaproducao)
+                            using (SqlDataReader reader = command.ExecuteReader())
                             {
-                                Console.WriteLine(p.DadosProducao());
-                                Console.WriteLine("\t\t\t\t\tItens: ");
-                                foreach (ItemProducao i in cadastros.itensproducao)
+                                while (reader.Read())
                                 {
-                                    if (i.Id == p.Id)
-                                        Console.WriteLine(i.DadosItemProducao());
+                                    Console.WriteLine("Numero Producao: {0}\nData Producao: {1}\nQuantidade producao: {2}\nProduto: {3}\nMateria Prima: {4}\nQuantidade materia prima: {5}\n--------------------------------------------------",
+                                        reader.GetString(0), reader.GetDateTime(1).ToString("dd/MM/yyyy"), reader.GetInt32(2), reader.GetString(3), reader.GetString(4), reader.GetDecimal(5));
+                                    encontrado = true;
                                 }
                             }
                         }
-                        break;*/
+                        connection.Close();
+                        break;
                     case "0":
                         break;
                     default:

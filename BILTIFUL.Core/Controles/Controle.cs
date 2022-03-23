@@ -167,11 +167,10 @@ namespace BILTIFUL.Core.Controles
                 connection.Open();
                 SqlCommand sql_cmnd = new SqlCommand("AdicionarItemProducao", connection);
                 sql_cmnd.CommandType = CommandType.StoredProcedure;
-                sql_cmnd.Parameters.AddWithValue("@qtdmp", SqlDbType.Decimal).Value = itemproducao.QuantidadeMateriaPrima.ToString().PadLeft(5,'0').Insert(3,".");
+                sql_cmnd.Parameters.AddWithValue("@qtdmp", SqlDbType.Decimal).Value = int.Parse(itemproducao.QuantidadeMateriaPrima);
                 sql_cmnd.Parameters.AddWithValue("@id_producao", SqlDbType.VarChar).Value = itemproducao.Id;
                 sql_cmnd.Parameters.AddWithValue("@id_mprima", SqlDbType.VarChar).Value = itemproducao.MateriaPrima;
                 sql_cmnd.ExecuteNonQuery();
-
                 connection.Close();
             }
 
