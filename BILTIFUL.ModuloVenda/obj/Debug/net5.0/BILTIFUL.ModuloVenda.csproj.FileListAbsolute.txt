@@ -28,3 +28,18 @@ C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL.ModuloVenda\obj\Debug\
 C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL.ModuloVenda\obj\Debug\net5.0\BILTIFUL.ModuloVenda.dll
 C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL.ModuloVenda\obj\Debug\net5.0\ref\BILTIFUL.ModuloVenda.dll
 C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL.ModuloVenda\obj\Debug\net5.0\BILTIFUL.ModuloVenda.pdb
+C:\Users\Fabio Z Ferrenha\Desktop\BILTUFUL FABIO 2\BILTIFUL.ModuloVenda\bin\Debug\net5.0\BILTIFUL.ModuloVenda.deps.json
+C:\Users\Fabio Z Ferrenha\Desktop\BILTUFUL FABIO 2\BILTIFUL.ModuloVenda\bin\Debug\net5.0\BILTIFUL.ModuloVenda.dll
+C:\Users\Fabio Z Ferrenha\Desktop\BILTUFUL FABIO 2\BILTIFUL.ModuloVenda\bin\Debug\net5.0\ref\BILTIFUL.ModuloVenda.dll
+C:\Users\Fabio Z Ferrenha\Desktop\BILTUFUL FABIO 2\BILTIFUL.ModuloVenda\bin\Debug\net5.0\BILTIFUL.ModuloVenda.pdb
+C:\Users\Fabio Z Ferrenha\Desktop\BILTUFUL FABIO 2\BILTIFUL.ModuloVenda\bin\Debug\net5.0\BILTIFUL.Core.dll
+C:\Users\Fabio Z Ferrenha\Desktop\BILTUFUL FABIO 2\BILTIFUL.ModuloVenda\bin\Debug\net5.0\BILTIFUL.Core.pdb
+C:\Users\Fabio Z Ferrenha\Desktop\BILTUFUL FABIO 2\BILTIFUL.ModuloVenda\obj\Debug\net5.0\BILTIFUL.ModuloVenda.csproj.AssemblyReference.cache
+C:\Users\Fabio Z Ferrenha\Desktop\BILTUFUL FABIO 2\BILTIFUL.ModuloVenda\obj\Debug\net5.0\BILTIFUL.ModuloVenda.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Fabio Z Ferrenha\Desktop\BILTUFUL FABIO 2\BILTIFUL.ModuloVenda\obj\Debug\net5.0\BILTIFUL.ModuloVenda.AssemblyInfoInputs.cache
+C:\Users\Fabio Z Ferrenha\Desktop\BILTUFUL FABIO 2\BILTIFUL.ModuloVenda\obj\Debug\net5.0\BILTIFUL.ModuloVenda.AssemblyInfo.cs
+C:\Users\Fabio Z Ferrenha\Desktop\BILTUFUL FABIO 2\BILTIFUL.ModuloVenda\obj\Debug\net5.0\BILTIFUL.ModuloVenda.csproj.CoreCompileInputs.cache
+C:\Users\Fabio Z Ferrenha\Desktop\BILTUFUL FABIO 2\BILTIFUL.ModuloVenda\obj\Debug\net5.0\BILTIFUL.ModuloVenda.csproj.CopyComplete
+C:\Users\Fabio Z Ferrenha\Desktop\BILTUFUL FABIO 2\BILTIFUL.ModuloVenda\obj\Debug\net5.0\BILTIFUL.ModuloVenda.dll
+C:\Users\Fabio Z Ferrenha\Desktop\BILTUFUL FABIO 2\BILTIFUL.ModuloVenda\obj\Debug\net5.0\ref\BILTIFUL.ModuloVenda.dll
+C:\Users\Fabio Z Ferrenha\Desktop\BILTUFUL FABIO 2\BILTIFUL.ModuloVenda\obj\Debug\net5.0\BILTIFUL.ModuloVenda.pdb

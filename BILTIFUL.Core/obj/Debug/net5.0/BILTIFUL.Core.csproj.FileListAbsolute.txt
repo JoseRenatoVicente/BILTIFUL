@@ -22,3 +22,15 @@ C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL.Core\obj\Debug\net5.0\
 C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL.Core\obj\Debug\net5.0\BILTIFUL.Core.dll
 C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL.Core\obj\Debug\net5.0\ref\BILTIFUL.Core.dll
 C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL.Core\obj\Debug\net5.0\BILTIFUL.Core.pdb
+C:\Users\Fabio Z Ferrenha\Desktop\BILTUFUL FABIO 2\BILTIFUL.Core\bin\Debug\net5.0\BILTIFUL.Core.deps.json
+C:\Users\Fabio Z Ferrenha\Desktop\BILTUFUL FABIO 2\BILTIFUL.Core\bin\Debug\net5.0\BILTIFUL.Core.dll
+C:\Users\Fabio Z Ferrenha\Desktop\BILTUFUL FABIO 2\BILTIFUL.Core\bin\Debug\net5.0\ref\BILTIFUL.Core.dll
+C:\Users\Fabio Z Ferrenha\Desktop\BILTUFUL FABIO 2\BILTIFUL.Core\bin\Debug\net5.0\BILTIFUL.Core.pdb
+C:\Users\Fabio Z Ferrenha\Desktop\BILTUFUL FABIO 2\BILTIFUL.Core\obj\Debug\net5.0\BILTIFUL.Core.csproj.AssemblyReference.cache
+C:\Users\Fabio Z Ferrenha\Desktop\BILTUFUL FABIO 2\BILTIFUL.Core\obj\Debug\net5.0\BILTIFUL.Core.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Fabio Z Ferrenha\Desktop\BILTUFUL FABIO 2\BILTIFUL.Core\obj\Debug\net5.0\BILTIFUL.Core.AssemblyInfoInputs.cache
+C:\Users\Fabio Z Ferrenha\Desktop\BILTUFUL FABIO 2\BILTIFUL.Core\obj\Debug\net5.0\BILTIFUL.Core.AssemblyInfo.cs
+C:\Users\Fabio Z Ferrenha\Desktop\BILTUFUL FABIO 2\BILTIFUL.Core\obj\Debug\net5.0\BILTIFUL.Core.csproj.CoreCompileInputs.cache
+C:\Users\Fabio Z Ferrenha\Desktop\BILTUFUL FABIO 2\BILTIFUL.Core\obj\Debug\net5.0\BILTIFUL.Core.dll
+C:\Users\Fabio Z Ferrenha\Desktop\BILTUFUL FABIO 2\BILTIFUL.Core\obj\Debug\net5.0\ref\BILTIFUL.Core.dll
+C:\Users\Fabio Z Ferrenha\Desktop\BILTUFUL FABIO 2\BILTIFUL.Core\obj\Debug\net5.0\BILTIFUL.Core.pdb
