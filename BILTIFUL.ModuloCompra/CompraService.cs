@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BILTIFUL.Core.Banco;
 
 
 
@@ -15,6 +16,7 @@ namespace BILTIFUL.ModuloCompra
     public class CompraService
     {
         CadastroService cadastroService = new CadastroService();
+        bd_biltiful banco = new bd_biltiful();
 
         //List<Fornecedor> testes = new List<Fornecedor>();
         //public void AdicionarFornecedor()
@@ -404,10 +406,10 @@ namespace BILTIFUL.ModuloCompra
                     quantidadeString[i] = quantidadeString[i].Trim().Replace(".", "").Replace(",", "");
                     totalItemString[i] = totalItemString[i].Trim().Replace(".", "").Replace(",", "");
 
-
-                    ItemCompra itemCompra = new ItemCompra(cod, idMPrima[i], quantidadeString[i], stringValor[i], totalItemString[i]);
+                    banco.InserirCompraItem(cod, idMPrima[i], quantidadeString[i], stringValor[i], totalItemString[i]);
+/*                    ItemCompra itemCompra = new ItemCompra(cod, idMPrima[i], quantidadeString[i], stringValor[i], totalItemString[i]);
                     new Controle(itemCompra);
-                    cadastroService.cadastros.itenscompra.Add(itemCompra);
+                    cadastroService.cadastros.itenscompra.Add(itemCompra);*/
                 }
             }
             else
