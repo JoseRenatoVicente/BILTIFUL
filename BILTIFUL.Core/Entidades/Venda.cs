@@ -14,18 +14,19 @@ namespace BILTIFUL.Core.Entidades
 
         public Venda()
         {
-
+            Itens = new List<ItemVenda>();
         }
 
         public Venda(string cliente, float valorTotal)
         {
             Cliente = cliente;
             ValorTotal = valorTotal;
+            Itens = new List<ItemVenda>();
         }
 
         public string Dados()
         {
-            return $"-------------------------------------------\nId: {Id}\nCliente: {Cliente}\nValor total: {ValorTotal}\n-------------------------------------------";
+            return $"--------------------Venda-----------------------\nId: {Id}\nCliente: {Cliente}\nValor total: {ValorTotal}\n-------------------------------------------";
         }
         public string ConverterParaDAT()
         {

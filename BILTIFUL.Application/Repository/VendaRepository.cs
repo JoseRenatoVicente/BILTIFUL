@@ -25,27 +25,27 @@ namespace BILTIFUL.Application.Repository
 
         public List<Venda> GetAllVendas()
         {
-            return Get("SELECT Id, DataProducao, Produto, Quantidade " +
+            return Get("SELECT Id, DataVenda, Cliente, ValorTotal " +
                 "FROM dbo.Venda");
         }
 
-        public List<Venda> GetByData(DateTime dataProducao)
+        public List<Venda> GetByData(DateTime dataVenda)
         {
-            return Get("SELECT Id, DataCompra, Fornecedor, ValorTotal " +
+            return Get("SELECT Id, DataVenda, Cliente, ValorTotal " +
                 "FROM dbo.Venda " +
-                $"WHERE DataProducao = '{dataProducao}')");
+                $"WHERE DataVenda = '{dataVenda.ToString("yyyy-MM-dd")}'");
         }
 
         public List<Venda> GetByCliente(string cpf)
         {
-            return Get("SELECT Id, DataVenda, Fornecedor, ValorTotal " +
+            return Get("SELECT Id, DataVenda, Cliente, ValorTotal " +
                 "FROM dbo.Venda " +
                 $"WHERE Cliente = '{cpf}')");
         }
 
         public Venda GetById(int id)
         {
-            Venda venda = Get("SELECT Id, DataVenda, Fornecedor, ValorTotal " +
+            Venda venda = Get("SELECT Id, DataVenda, Cliente, ValorTotal " +
                 "FROM dbo.Venda " +
                 $"WHERE Id = {id}").FirstOrDefault();
 

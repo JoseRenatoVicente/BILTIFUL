@@ -22,15 +22,15 @@ namespace BILTIFUL.Application.Repository
         }
         public List<Compra> GetAllCompras()
         {
-            return Get("SELECT Id, DataProducao, Produto, Quantidade " +
+            return Get("SELECT Id, DataCompra, Fornecedor, ValorTotal " +
                 "FROM dbo.Compra");
         }
 
-        public List<Compra> GetByData(DateTime dataProducao)
+        public List<Compra> GetByData(DateTime dataCompra)
         {
             return Get("SELECT Id, DataCompra, Fornecedor, ValorTotal " +
                 "FROM dbo.Compra " +
-                $"WHERE DataCompra = '{dataProducao}')");
+                $"WHERE DataCompra = '{dataCompra.ToString("yyyy-MM-dd")}'");
         }
 
         public List<Compra> GetByFornecedor(string cnpj)

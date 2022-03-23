@@ -39,7 +39,7 @@ namespace BILTIFUL.Application.Repository
             var command = CreateCommand(query);
 
             command.Parameters.AddWithValue("@id", itemVenda.Id);
-            command.Parameters.AddWithValue("@produto", itemVenda.Produto);
+            command.Parameters.AddWithValue("@produto", long.Parse(itemVenda.Produto));
             command.Parameters.AddWithValue("@quantidade", itemVenda.Quantidade);
             command.Parameters.AddWithValue("@valorUnitario", itemVenda.ValorUnitario);
             command.Parameters.AddWithValue("@totalItem", itemVenda.TotalItem);

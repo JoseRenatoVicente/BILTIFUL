@@ -11,6 +11,7 @@ namespace BILTIFUL.Application.Repository
 {
     public class ProducaoRepository : RepositorySQL<Producao>
     {
+        ItemProducaoRepository itemProducaoRepository = new ItemProducaoRepository();
         public ProducaoRepository()
         {
             connection = new SqlConnection(Configuration.ConnectionString);
@@ -30,7 +31,14 @@ namespace BILTIFUL.Application.Repository
         {
             return Get("SELECT Id, DataProducao, Produto, Quantidade " +
                 "FROM dbo.Producao " +
-                $"WHERE UPPER(Nome) LIKE UPPER('{dataProducao}%')");
+                $"WHERE DataProducao = '{dataProducao.ToString("yyyy-MM-dd")}'");
+        }
+
+        public List<Producao> GetByProduto(long codigoBarras)
+        {
+            return Get("SELECT Id, DataProducao, Produto, Quantidade " +
+                "FROM dbo.Producao " +
+                $"WHERE Produto = {codigoBarras}");
         }
 
         public Producao GetById(int id)
@@ -39,24 +47,8 @@ namespace BILTIFUL.Application.Repository
                 "FROM dbo.Producao " +
                 $"WHERE Id = {id}").FirstOrDefault();
 
-            producao.Itens = GetItensProducaoById(producao.Id);
+            producao.Itens = itemProducaoRepository.GetById(producao.Id);
             return producao;
-        }
-
-        public List<ItemProducao> GetItensProducaoById(int id)
-        {
-            string query = "SELECT Id, DataProducao, Produto, Quantidade " +
-                "FROM dbo.Producao " +
-                $"WHERE Id = {id}";
-
-            SqlDataReader reader = CreateCommand(query).ExecuteReader();
-
-            List<ItemProducao> items = new List<ItemProducao>();
-            while (reader.Read())
-            {
-                items.Add(MapItemProducao(reader));
-            }
-            return items;
         }
 
         public List<Producao> SearchMPrimas(Func<Producao, bool> where)
@@ -66,53 +58,26 @@ namespace BILTIFUL.Application.Repository
 
         public Producao Add(Producao producao)
         {
-            var command = CreateCommand("InserirProducao");
-            command.CommandType = CommandType.StoredProcedure;
+            string query = "INSERT INTO Producao" +
+"(Produto, Quantidade) " +
+"OUTPUT Inserted.Id " +
+"VALUES(@produto, @quantidade)";
+            var command = CreateCommand(query);
 
-            command.Parameters.AddWithValue("@ProdutoCodigoBarras", producao.Produto);
-            command.Parameters.AddWithValue("@Quantidade", producao.Quantidade);
-            command.ExecuteNonQuery();
-            
+            command.Parameters.AddWithValue("@produto", producao.Produto);
+            command.Parameters.AddWithValue("@quantidade", producao.Quantidade);
+
+            var reader = command.ExecuteReader();
+            reader.Read();
+            producao.Id = int.Parse(reader["Id"].ToString());
 
             producao.Itens.ForEach(e =>
             {
                 e.Id = producao.Id;
-                AddItemProducao(e);
+                itemProducaoRepository.Add(e);
             });
 
             return producao;
-        }
-
-        public void AddItemProducao(ItemProducao itemProducao)
-        {
-            var command = CreateCommand("InserirItemProducao");
-            command.CommandType = CommandType.StoredProcedure;
-
-            command.Parameters.AddWithValue("@Id", itemProducao.Id);
-            command.Parameters.AddWithValue("@MateriaPrimaId", itemProducao.MateriaPrima);
-            command.Parameters.AddWithValue("@QuantidadeMateriaPrima", itemProducao.QuantidadeMateriaPrima);
-
-            command.ExecuteNonQuery();
-        }
-
-        public bool Remove(string id)
-        {
-            var command = CreateCommand($"UPDATE MPrima SET Situacao='{(char)Situacao.Inativo}' WHERE Id = @id");
-            command.Parameters.AddWithValue("@id", id);
-
-            return command.ExecuteNonQuery() == 1 ? true : false;
-        }
-
-
-        protected ItemProducao MapItemProducao(IDataRecord record)
-        {
-            return new ItemProducao()
-            {
-                Id = int.Parse(record["Id"].ToString()),
-                DataProducao = DateTime.Parse(record["DataProducao"].ToString()),
-                MateriaPrima = record["MateriaPrima"].ToString(),
-                QuantidadeMateriaPrima = float.Parse(record["QuantidadeMateriaPrima"].ToString())
-            };
         }
 
         protected override Producao Map(IDataRecord record)

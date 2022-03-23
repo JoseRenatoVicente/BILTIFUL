@@ -7,7 +7,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BILTIFUL.Core", "BILTIFUL.C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BILTIFUL", "BILTIFUL\BILTIFUL.csproj", "{A7C6147F-337B-43E9-B9C9-53A08505EA72}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BILTIFUL.Application", "BILTIFUL.Application\BILTIFUL.Application.csproj", "{0FB4E520-BAC5-4D8A-8CC1-E2352AD99B2E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BILTIFUL.Application", "BILTIFUL.Application\BILTIFUL.Application.csproj", "{0FB4E520-BAC5-4D8A-8CC1-E2352AD99B2E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ScripSQL", "ScripSQL", "{6C102498-F9A4-4447-A362-E4BE361A23D4}"
+	ProjectSection(SolutionItems) = preProject
+		..\..\..\Desktop\ScripDataBaseBiltiful.sql = ..\..\..\Desktop\ScripDataBaseBiltiful.sql
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

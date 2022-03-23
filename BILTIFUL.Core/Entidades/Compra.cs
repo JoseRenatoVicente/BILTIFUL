@@ -13,13 +13,14 @@ namespace BILTIFUL.Core.Entidades
         public List<ItemCompra> Itens { get; set; }
         public Compra()
         {
-
+            Itens = new List<ItemCompra>();
         }
 
         public Compra(string fornecedor, float valorTotal)
         {
             Fornecedor = fornecedor;
             ValorTotal = valorTotal;
+            Itens = new List<ItemCompra>();
         }
 
         public string ConverterParaDAT()

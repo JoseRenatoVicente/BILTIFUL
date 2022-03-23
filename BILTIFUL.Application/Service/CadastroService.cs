@@ -13,6 +13,7 @@ namespace BILTIFUL.Application.Service
         VendaRepository vendaRepository = new VendaRepository();
         ItemVendaRepository itemVendaRepository = new ItemVendaRepository();
         ProducaoRepository producaoRepository = new ProducaoRepository();
+        ItemProducaoRepository itemProducaoRepository = new ItemProducaoRepository();
         MateriaPrimaRepository materiaPrimaRepository = new MateriaPrimaRepository();
         FornecedorRepository fornecedorRepository = new FornecedorRepository();
         ClienteRepository clienteRepository = new ClienteRepository();
@@ -477,10 +478,10 @@ namespace BILTIFUL.Application.Service
                             Console.WriteLine("\t\t\t\t\tNenhum produto registrado");
                         break;
                     case "7":
-                       /* if (producaoRepository.Count() != 0)
-                            new Registros(producaoRepository.GetAllProducoes(), cadastros.itensproducao);
-                        else
-                            Console.WriteLine("\t\t\t\t\tNenhum produto registrado");*/
+                        /* if (producaoRepository.Count() != 0)
+                             new Registros(producaoRepository.GetAllProducoes(), cadastros.itensproducao);
+                         else
+                             Console.WriteLine("\t\t\t\t\tNenhum produto registrado");*/
                         break;
                     case "0":
 
@@ -569,6 +570,7 @@ namespace BILTIFUL.Application.Service
                             encontrado = true;
                             localizarmprima.ForEach(p => Console.WriteLine(p.Dados()));
                         }
+                        BackSubMenuLocalizar();
                         break;
                     case "4":
                         Console.Clear();
@@ -586,63 +588,63 @@ namespace BILTIFUL.Application.Service
                         Console.Clear();
                         Console.Write("\t\t\t\t\tDigite a data de venda que deseja localizar(dd/mm/aaaa): ");
                         DateTime dvenda = DateTime.Parse(Console.ReadLine());
-                        /* List<Venda> localizavenda =  cadastros.vendas.FindAll(p => p.DataVenda == dvenda);
-                         if (localizavenda != null)
-                         {
-                             encontrado = true;
-                             foreach (Venda p in localizavenda)
-                             {
-                                 Console.WriteLine(p.DadosVenda());
-                                 Console.WriteLine("\t\t\t\t\tItens: ");
-                                 foreach (ItemVenda i in cadastros.itensvenda)
-                                 {
-                                     if (i.Id == p.Id)
-                                         Console.WriteLine(i.DadosItemVenda());
-                                 }
-                             }
-                         }*/
+                        List<Venda> localizavenda = vendaRepository.GetByData(dvenda);
+                        if (localizavenda != null)
+                        {
+                            encontrado = true;
+                            foreach (Venda p in localizavenda)
+                            {
+                                Console.WriteLine(p.Dados());
+                                foreach (ItemVenda i in itemVendaRepository.GetById(p.Id))
+                                {
+                                    Console.WriteLine("Itens: ");
+                                    if (i.Id == p.Id)
+                                        Console.WriteLine(i.Dados());
+                                }
+                            }
+                        }
                         BackSubMenuLocalizar();
                         break;
                     case "6":
                         Console.Clear();
                         Console.Write("\t\t\t\t\tDigite o data de compra que deseja localizar(dd/mm/aaaa): ");
                         DateTime dcompra = DateTime.Parse(Console.ReadLine());
-                        /*List<Compra> localizacompra = cadastros.compras.FindAll(p => p.DataCompra == dcompra);
+                        List<Compra> localizacompra = compraRepository.GetByData(dcompra);
                         if (localizacompra != null)
                         {
                             encontrado = true;
                             foreach (Compra p in localizacompra)
                             {
-                                Console.WriteLine(p.DadosCompra());
-                                Console.WriteLine("\t\t\t\t\tItens: ");
-                                foreach (ItemCompra i in cadastros.itenscompra)
+                                Console.WriteLine(p.Dados());
+                                foreach (ItemCompra i in itemCompraRepository.GetById(p.Id))
                                 {
+                                Console.WriteLine("Itens: ");
                                     if (i.Id == p.Id)
-                                        Console.WriteLine(i.DadosItemCompra());
+                                        Console.WriteLine(i.Dados());
                                 }
                             }
-                        }*/
+                        }
                         BackSubMenuLocalizar();
                         break;
                     case "7":
                         Console.Clear();
                         Console.Write("\t\t\t\t\tDigite o data de produção que deseja localizar(dd/mm/aaaa): ");
                         DateTime dproducao = DateTime.Parse(Console.ReadLine());
-                        /*List<Producao> localizaproducao = cadastros.producao.FindAll(p => p.DataProducao == dproducao);
+                        List<Producao> localizaproducao = producaoRepository.GetByData(dproducao);
                         if (localizaproducao != null)
                         {
                             encontrado = true;
                             foreach (Producao p in localizaproducao)
                             {
                                 Console.WriteLine(p.DadosProducao());
-                                Console.WriteLine("\t\t\t\t\tItens: ");
-                                foreach (ItemProducao i in cadastros.itensproducao)
+                                foreach (ItemProducao i in itemProducaoRepository.GetById(p.Id))
                                 {
+                                Console.WriteLine("Itens: ");
                                     if (i.Id == p.Id)
-                                        Console.WriteLine(i.DadosItemProducao());
+                                        Console.WriteLine(i.Dados());
                                 }
                             }
-                        }*/
+                        }
                         BackSubMenuLocalizar();
                         break;
                     case "0":

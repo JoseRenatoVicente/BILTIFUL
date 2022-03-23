@@ -46,6 +46,7 @@ namespace BILTIFUL
 
                 case "3":
                     Console.Clear();
+                    new VendaService().SubMenu();
                     BackMenu();
                     break;
 

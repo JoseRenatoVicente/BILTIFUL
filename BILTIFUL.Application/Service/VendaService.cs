@@ -128,6 +128,7 @@ namespace BILTIFUL.Application.Service
                     {
                         if (confirmarCliente == 'S')
                         {
+                            venda = new Venda(clienteVenda, valorVenda);
                             ItemVenda();
                         }
                     }
@@ -157,6 +158,8 @@ namespace BILTIFUL.Application.Service
                 Produto aux = produtoRepository.GetByCodigoBarras(codProduto);
                 if (aux != null)
                 {
+                    Console.WriteLine(aux.Dados());
+
                     Console.Write("\t\t\t\t\tDigite a Quantidade do Produto (1 / 999): ");
                     if (float.TryParse(Console.ReadLine(), out float CanParse))
                     {
@@ -251,13 +254,17 @@ namespace BILTIFUL.Application.Service
                         Console.WriteLine("\t\t\t\t\tDigite uma quantidade válida!!");
                     }
                 }
+                else
+                {
+                    Console.WriteLine("Código inválido");
+                }
             } while (cont <= 2 || cont != 3);
 
             Console.Write("\n\t\t\t\t\tConfirmar Compras (S/N): ");
             string confirmarCompras = Console.ReadLine().ToUpper();
             if (confirmarCompras == "S" || confirmarCompras == "SIM")
             {
-                vendaRepository.Add(new Venda(clienteVenda, valorVenda));
+                vendaRepository.Add(venda);
 
                 Console.WriteLine("\n\t\t\t\t\tCompra cadastrada com sucesso!!");
                 Console.ReadKey();

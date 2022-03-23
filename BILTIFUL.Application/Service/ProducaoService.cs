@@ -303,17 +303,17 @@ namespace BILTIFUL.Application.Service
         private void Localizar()
         {
 
-            Console.WriteLine("Digite o nome ou código de barras do produto para localizar a produção dele.");
+            Console.WriteLine("Digite o nome do produto para localizar a produção dele.");
             string busca = Console.ReadLine();
 
             Produto produto = new Produto();
-            //produtoRepository.GetByWhere(c => c.Nome == busca || c.CodigoBarras == busca);
-            Producao producao = new Producao();
-                //produto != null ? producao = producaoRepository.GetByWhere(c => c.Produto.ToString() == produto.CodigoBarras) : null;
+            produtoRepository.GetByNome(busca);
+            Producao producao;
+            producao = produto != null ? producaoRepository.GetByProduto(produto.CodigoBarras).FirstOrDefault() : null;
 
             if (producao != null)
             {
-                //DadosProducao(producaoRepository.GetByWhere(c => c.Produto.ToString() == produto.CodigoBarras));
+                DadosProducao(producao);
             }
             else
             {
