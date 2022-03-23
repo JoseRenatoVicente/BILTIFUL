@@ -40,3 +40,45 @@ C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL\BILTIFUL\bin\Debug\net5.0\runtimes\wi
 C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL\BILTIFUL\bin\Debug\net5.0\runtimes\win-x86\native\sni.dll
 C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL\BILTIFUL\bin\Debug\net5.0\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
 C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL\BILTIFUL\bin\Debug\net5.0\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL\bin\Debug\net5.0\BILTIFUL.exe
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL\bin\Debug\net5.0\BILTIFUL.deps.json
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL\bin\Debug\net5.0\BILTIFUL.runtimeconfig.json
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL\bin\Debug\net5.0\BILTIFUL.runtimeconfig.dev.json
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL\bin\Debug\net5.0\BILTIFUL.dll
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL\bin\Debug\net5.0\ref\BILTIFUL.dll
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL\bin\Debug\net5.0\BILTIFUL.pdb
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL\bin\Debug\net5.0\Microsoft.Extensions.Configuration.dll
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL\bin\Debug\net5.0\Microsoft.Extensions.Configuration.Abstractions.dll
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL\bin\Debug\net5.0\Microsoft.Extensions.Configuration.FileExtensions.dll
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL\bin\Debug\net5.0\Microsoft.Extensions.Configuration.Json.dll
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL\bin\Debug\net5.0\Microsoft.Extensions.FileProviders.Abstractions.dll
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL\bin\Debug\net5.0\Microsoft.Extensions.FileProviders.Physical.dll
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL\bin\Debug\net5.0\Microsoft.Extensions.FileSystemGlobbing.dll
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL\bin\Debug\net5.0\Microsoft.Extensions.Primitives.dll
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL\bin\Debug\net5.0\System.Data.SqlClient.dll
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL\bin\Debug\net5.0\System.Runtime.CompilerServices.Unsafe.dll
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL\bin\Debug\net5.0\System.Text.Encodings.Web.dll
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL\bin\Debug\net5.0\System.Text.Json.dll
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL\bin\Debug\net5.0\runtimes\win-arm64\native\sni.dll
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL\bin\Debug\net5.0\runtimes\win-x64\native\sni.dll
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL\bin\Debug\net5.0\runtimes\win-x86\native\sni.dll
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL\bin\Debug\net5.0\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL\bin\Debug\net5.0\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL\bin\Debug\net5.0\BILTIFUL.Core.dll
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL\bin\Debug\net5.0\BILTIFUL.ModuloCompra.dll
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL\bin\Debug\net5.0\BILTIFUL.ModuloProducao.dll
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL\bin\Debug\net5.0\BILTIFUL.ModuloVenda.dll
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL\bin\Debug\net5.0\BILTIFUL.ModuloCompra.pdb
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL\bin\Debug\net5.0\BILTIFUL.ModuloProducao.pdb
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL\bin\Debug\net5.0\BILTIFUL.ModuloVenda.pdb
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL\bin\Debug\net5.0\BILTIFUL.Core.pdb
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL\obj\Debug\net5.0\BILTIFUL.csproj.AssemblyReference.cache
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL\obj\Debug\net5.0\BILTIFUL.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL\obj\Debug\net5.0\BILTIFUL.AssemblyInfoInputs.cache
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL\obj\Debug\net5.0\BILTIFUL.AssemblyInfo.cs
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL\obj\Debug\net5.0\BILTIFUL.csproj.CoreCompileInputs.cache
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL\obj\Debug\net5.0\BILTIFUL.csproj.CopyComplete
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL\obj\Debug\net5.0\BILTIFUL.dll
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL\obj\Debug\net5.0\ref\BILTIFUL.dll
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL\obj\Debug\net5.0\BILTIFUL.pdb
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL\obj\Debug\net5.0\BILTIFUL.genruntimeconfig.cache
