@@ -13,3 +13,18 @@ C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL\BILTIFUL.ModuloCompra\obj\Debug\net5.
 C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL\BILTIFUL.ModuloCompra\obj\Debug\net5.0\BILTIFUL.ModuloCompra.dll
 C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL\BILTIFUL.ModuloCompra\obj\Debug\net5.0\ref\BILTIFUL.ModuloCompra.dll
 C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL\BILTIFUL.ModuloCompra\obj\Debug\net5.0\BILTIFUL.ModuloCompra.pdb
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL.ModuloCompra\bin\Debug\net5.0\BILTIFUL.ModuloCompra.deps.json
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL.ModuloCompra\bin\Debug\net5.0\BILTIFUL.ModuloCompra.dll
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL.ModuloCompra\bin\Debug\net5.0\ref\BILTIFUL.ModuloCompra.dll
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL.ModuloCompra\bin\Debug\net5.0\BILTIFUL.ModuloCompra.pdb
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL.ModuloCompra\bin\Debug\net5.0\BILTIFUL.Core.dll
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL.ModuloCompra\bin\Debug\net5.0\BILTIFUL.Core.pdb
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL.ModuloCompra\obj\Debug\net5.0\BILTIFUL.ModuloCompra.csproj.AssemblyReference.cache
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL.ModuloCompra\obj\Debug\net5.0\BILTIFUL.ModuloCompra.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL.ModuloCompra\obj\Debug\net5.0\BILTIFUL.ModuloCompra.AssemblyInfoInputs.cache
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL.ModuloCompra\obj\Debug\net5.0\BILTIFUL.ModuloCompra.AssemblyInfo.cs
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL.ModuloCompra\obj\Debug\net5.0\BILTIFUL.ModuloCompra.csproj.CoreCompileInputs.cache
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL.ModuloCompra\obj\Debug\net5.0\BILTIFUL.ModuloCompra.csproj.CopyComplete
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL.ModuloCompra\obj\Debug\net5.0\BILTIFUL.ModuloCompra.dll
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL.ModuloCompra\obj\Debug\net5.0\ref\BILTIFUL.ModuloCompra.dll
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL FABIO\BILTIFUL.ModuloCompra\obj\Debug\net5.0\BILTIFUL.ModuloCompra.pdb
