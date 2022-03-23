@@ -1,0 +1,15 @@
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL\BILTIFUL.ModuloProducao\bin\Debug\net5.0\BILTIFUL.ModuloProducao.deps.json
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL\BILTIFUL.ModuloProducao\bin\Debug\net5.0\BILTIFUL.ModuloProducao.dll
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL\BILTIFUL.ModuloProducao\bin\Debug\net5.0\ref\BILTIFUL.ModuloProducao.dll
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL\BILTIFUL.ModuloProducao\bin\Debug\net5.0\BILTIFUL.ModuloProducao.pdb
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL\BILTIFUL.ModuloProducao\bin\Debug\net5.0\BILTIFUL.Core.dll
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL\BILTIFUL.ModuloProducao\bin\Debug\net5.0\BILTIFUL.Core.pdb
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL\BILTIFUL.ModuloProducao\obj\Debug\net5.0\BILTIFUL.ModuloProducao.csproj.AssemblyReference.cache
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL\BILTIFUL.ModuloProducao\obj\Debug\net5.0\BILTIFUL.ModuloProducao.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL\BILTIFUL.ModuloProducao\obj\Debug\net5.0\BILTIFUL.ModuloProducao.AssemblyInfoInputs.cache
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL\BILTIFUL.ModuloProducao\obj\Debug\net5.0\BILTIFUL.ModuloProducao.AssemblyInfo.cs
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL\BILTIFUL.ModuloProducao\obj\Debug\net5.0\BILTIFUL.ModuloProducao.csproj.CoreCompileInputs.cache
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL\BILTIFUL.ModuloProducao\obj\Debug\net5.0\BILTIFUL.ModuloProducao.csproj.CopyComplete
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL\BILTIFUL.ModuloProducao\obj\Debug\net5.0\BILTIFUL.ModuloProducao.dll
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL\BILTIFUL.ModuloProducao\obj\Debug\net5.0\ref\BILTIFUL.ModuloProducao.dll
+C:\Users\Fabio Z Ferrenha\Desktop\BILTIFUL\BILTIFUL.ModuloProducao\obj\Debug\net5.0\BILTIFUL.ModuloProducao.pdb

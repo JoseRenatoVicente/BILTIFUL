@@ -15,11 +15,10 @@ namespace BILTIFUL.Core.Entidades
         {
 
         }
-        public Venda(string id, string cliente, string valorTotal)
+        public Venda(string id, string cliente)
         {
             Id = id.PadLeft(5,'0');
             Cliente = cliente;
-            ValorTotal = valorTotal.PadLeft(7,'0');
         }
 
         public Venda(string id,DateTime dataVenda, string cliente, string valorTotal)

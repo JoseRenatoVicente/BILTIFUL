@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -18,10 +19,9 @@ namespace BILTIFUL.Core
         {
         }
 
-        public Controle cadastros = new Controle();
-
-        public void SubMenu()
+        public void SubMenu(SqlConnection connection)
         {
+
             string opc;
             do
             {
@@ -29,34 +29,34 @@ namespace BILTIFUL.Core
                 switch (opc)
                 {
                     case "1":
-                        CadastroCliente();
+                        CadastroCliente(connection);
                         break;
                     case "2":
-                        CadastroProduto();
+                        CadastroProduto(connection); ;
                         break;
                     case "3":
-                        CadastroFornecedor();
+                        CadastroFornecedor(connection);
                         break;
                     case "4":
-                        CadastroMateriaPrima();
+                        CadastroMateriaPrima(connection); ;
                         break;
                     case "5":
-                        CadastroInadimplente();
+                        CadastroInadimplente(connection); ;
                         break;
                     case "6":
-                        CadastroBloqueado();
+                        CadastroBloqueado(connection); ;
                         break;
                     case "7":
-                        RemoverInadimplencia();
+                        RemoverInadimplencia(connection); ;
                         break;
                     case "8":
-                        RemoverBloqueio();
+                        CadastroCliente(connection); ;
                         break;
                     case "9":
-                        MostrarRegistro();
+                        CadastroCliente(connection); ;
                         break;
                     case "10":
-                        LocalizarRegistro();
+                        LocalizarRegistro(connection);
                         break;
                     case "0":
                         break;
@@ -64,7 +64,7 @@ namespace BILTIFUL.Core
                         Console.WriteLine("Opção invalida!");
                         break;
                 }
-               
+
                 Console.Clear();
             } while (opc != "0");
         }
@@ -89,7 +89,12 @@ namespace BILTIFUL.Core
             opc = Console.ReadLine();
             return opc;
         }
-        public Cliente CadastroCliente()
+        public void InstanciaBanco()
+        {
+            Controle conexao = new Controle();
+            SubMenu(conexao.connection);
+        }
+        public Cliente CadastroCliente(SqlConnection connection)
         {
             string cpf;
             string datanascimento;
@@ -105,11 +110,6 @@ namespace BILTIFUL.Core
                 if (!ValidaCpf(cpf))//valida cpf
                     Console.WriteLine("\t\t\t\t\tCpf invalido!\n\t\t\t\t\tDigite novamente");
             } while (!ValidaCpf(cpf));//enquanto cpf nao for valido digitar denovo
-            if (cadastros.clientes.Find(p => p.CPF == (cpf)) != null)
-            {
-                Console.WriteLine("\t\t\t\t\tCliente com esse CPF ja existe");
-                return null;
-            }
             do
             {
                 Console.Write("\t\t\t\t\tNome: ");
@@ -138,8 +138,7 @@ namespace BILTIFUL.Core
 
             Cliente cliente = new Cliente(cpf, nome, dnascimento, sexo);
 
-            new Controle(cliente);
-            cadastros.clientes.Add(cliente);
+            Controle controle_cliente = new Controle(cliente,connection);
 
             return cliente;
         }
@@ -176,7 +175,7 @@ namespace BILTIFUL.Core
             digito = digito + resto.ToString();
             return cpf.EndsWith(digito);
         }
-        public Fornecedor CadastroFornecedor()
+        public Fornecedor CadastroFornecedor(SqlConnection connection)
         {
             string dataabertura;
             DateTime dabertura;
@@ -192,11 +191,6 @@ namespace BILTIFUL.Core
                     Console.WriteLine("\t\t\t\t\tCnpj invalido!\nDigite novamente");
 
             } while (!ValidaCnpj(cnpj));//enquanto cpf nao for valido digitar denovo
-            if (cadastros.fornecedores.Find(p => p.CNPJ == cnpj) != null)
-            {
-                Console.WriteLine("\t\t\t\t\tFornecedor com esse cnpj ja existe");
-                return null;
-            }
             do
             {
                 Console.Write("\t\t\t\t\tRazão Social: ");
@@ -218,8 +212,7 @@ namespace BILTIFUL.Core
 
             Fornecedor fornecedor = new Fornecedor(cnpj, rsocial, dabertura);
 
-            new Controle(fornecedor);
-            cadastros.fornecedores.Add(fornecedor);
+            new Controle(fornecedor,connection);
 
             return fornecedor;
         }
@@ -255,7 +248,7 @@ namespace BILTIFUL.Core
             digito = digito + resto.ToString();
             return cnpj.EndsWith(digito);
         }
-        public Produto CadastroProduto()
+        public Produto CadastroProduto(SqlConnection connection)
         {
             string svalor;
             int valor;
@@ -275,31 +268,37 @@ namespace BILTIFUL.Core
                     Console.WriteLine("\t\t\t\t\tValor invalido!");
             } while (!int.TryParse(svalor, out valor) || (valor > 99999) || (valor <= 0));
 
-            cadastros.codigos[0]++;
-            SalvarCodigos();
-            string cod = "" + cadastros.codigos[0];
+
+
+            string cod = "" + (NumeroElementos("Produto", connection) + 1);
 
             Produto produto = new Produto(cod, nome, svalor);
-            new Controle(produto);
-            cadastros.produtos.Add(produto);
+
+            new Controle(produto, connection);
+
             return produto;
         }
-        public void SalvarCodigos()
+        public int NumeroElementos(string tabela, SqlConnection connection)
         {
-            try
-            {
-                StreamWriter sw = new StreamWriter("Arquivos\\Controle.dat");
+            int NumeroProdutos = 0;
 
-                cadastros.codigos.ForEach(c => sw.WriteLine(c));
+            connection.Open();
 
-                sw.Close();
-            }
-            catch (Exception ex)
+            String sql = "SELECT count(*) FROM dbo." + tabela;
+
+            using (SqlCommand command = new SqlCommand(sql, connection))
             {
-                Console.WriteLine(ex.Message);
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    reader.Read();
+                    NumeroProdutos = reader.GetInt32(0);
+                }
             }
+            connection.Close();
+
+            return NumeroProdutos;
         }
-        public MPrima CadastroMateriaPrima()
+        public MPrima CadastroMateriaPrima(SqlConnection connection)
         {
             string nome;
             Console.Clear();
@@ -310,19 +309,16 @@ namespace BILTIFUL.Core
                 nome = Console.ReadLine().Trim();
             } while (nome == "");
 
-            cadastros.codigos[1]++;
-            SalvarCodigos();
-            string cod = "" + cadastros.codigos[1];
+            string cod = "" + (NumeroElementos("MPrima",connection) + 1);
 
             MPrima mPrima = new MPrima(cod, nome);
 
-            new Controle(mPrima);
-            cadastros.materiasprimas.Add(mPrima);
+            new Controle(mPrima, connection);
 
             return mPrima;
 
         }
-        public string CadastroInadimplente()
+        public string CadastroInadimplente(SqlConnection connection)
         {
             string inadimplente;
             Console.Clear();
@@ -334,22 +330,11 @@ namespace BILTIFUL.Core
                 if (!ValidaCpf(inadimplente))//valida cpf
                     Console.WriteLine("\t\t\t\t\tCpf invalido!\nDigite novamente");
             } while (!ValidaCpf(inadimplente));
-            if (cadastros.inadimplentes.Find(p => p == "" + inadimplente) != null)
-            {
-                Console.WriteLine("\t\t\t\t\tInadimplente com esse CPF ja existe");
-                return null;
-            }
-            string cpf = inadimplente;
 
-            if (cadastros.clientes.Find(p => p.CPF == cpf) != null)
-            {
-                new Controle(cpf);
-                cadastros.inadimplentes.Add("" + cpf);
-                return cpf;
-            }
-            return null;
+            new Controle(inadimplente, true, connection);
+            return inadimplente;
         }
-        public string CadastroBloqueado()
+        public string CadastroBloqueado(SqlConnection connection)
         {
             string bloqueado;
             Console.Clear();
@@ -361,24 +346,11 @@ namespace BILTIFUL.Core
                 if (!ValidaCnpj(bloqueado))//valida cpf
                     Console.WriteLine("\t\t\t\t\tCnpj invalido!\nDigite novamente");
             } while (!ValidaCnpj(bloqueado));
-            if (cadastros.bloqueados.Find(p => p == bloqueado) != null)
-            {
-                Console.WriteLine("\t\t\t\t\tFornecedor com esse cnpj ja existe");
-                return null;
-            }
 
-            string cnpj = bloqueado;
-
-            if (cadastros.fornecedores.Find(p => p.CNPJ == cnpj) != null)
-            {
-                new Controle(cnpj);
-                cadastros.bloqueados.Add("" + cnpj);
-                return cnpj;
-            }
-            return null;
+            new Controle(bloqueado, true, connection);
+            return bloqueado;
         }
-
-        public void RemoverInadimplencia()
+        public void RemoverInadimplencia(SqlConnection connection)
         {
             string inadimplente;
             Console.Clear();
@@ -391,79 +363,29 @@ namespace BILTIFUL.Core
                     Console.WriteLine("\t\t\t\t\tCpf invalido!\n\t\t\t\t\tDigite novamente");
             } while (!ValidaCpf(inadimplente));
 
-            long cpf = long.Parse(inadimplente);
+            new Controle(inadimplente, false, connection);
+            Console.WriteLine("\t\t\t\t\tCpf Liberado");
 
-            if (cadastros.inadimplentes.Find(p => p == "" + cpf) != null)
-            {
-                Remover(cpf);
-                Console.WriteLine("\t\t\t\t\tCpf Liberado");
-            }
-                
         }
-        public void RemoverBloqueio()
+        public void RemoverBloqueado(SqlConnection connection)
         {
             string bloqueado;
             Console.Clear();
-            Console.WriteLine("\n\t\t\t\t\t===========REMOVER DE BLOQUEADO===========");
+            Console.WriteLine("\n\t\t\t\t\t===========REMOVER DE INADIMPLENTE===========");
             do
             {
-                Console.Write("\t\t\t\t\tDigite o cnpj do fornecedor bloqueado: ");
+                Console.Write("\t\t\t\t\tDigite o cnpj bloqueado: ");
                 bloqueado = Console.ReadLine().Trim().Replace(".", "").Replace("-", "").Replace("/", "");
                 if (!ValidaCnpj(bloqueado))//valida cpf
-                    Console.WriteLine("\t\t\t\t\tCpf invalido!\n\t\t\t\t\tDigite novamente");
+                    Console.WriteLine("\t\t\t\t\tcnpj invalido!\n\t\t\t\t\tDigite novamente");
             } while (!ValidaCnpj(bloqueado));
 
-            long cnpj = long.Parse(bloqueado);
+            new Controle(bloqueado, false, connection);
+            Console.WriteLine("\t\t\t\t\tCNPJ Liberado");
 
-            if (cadastros.bloqueados.Find(p => p == "" + cnpj) != null)
-                Remover(cnpj);
-        }
-        public void Remover(long chave)
-        {
-            string schave = "" + chave;
-            if (CadastroService.ValidaCpf(schave))
-            {
-                cadastros.inadimplentes.Remove(schave);
-                try//envia cliente para arquivo como novo cliente]try
-                {
-                    int i = 0;
-                    StreamWriter sw = new StreamWriter("Arquivos\\Risco.dat");
-                    while (i != cadastros.inadimplentes.Count)
-                    {
-                        sw.WriteLine(cadastros.inadimplentes[i]);
-                        i++;
-                    }
-                    sw.Close();
-                    Console.WriteLine("\t\t\t\t\tCliente removido dos inadimplentes!");
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("Exception: " + e.Message);
-                }
-            }
-            if (CadastroService.ValidaCnpj(schave))
-            {
-                cadastros.bloqueados.Remove(schave);
-                try//envia cliente para arquivo como novo cliente]try
-                {
-                    int i = 0;
-                    StreamWriter sw = new StreamWriter("Arquivos\\Bloqueado.dat");
-                    while (i != cadastros.bloqueados.Count)
-                    {
-                        sw.WriteLine(cadastros.bloqueados[i]);
-                        i++;
-                    }
-                    sw.Close();
-                    Console.WriteLine("\t\t\t\t\tFornecedor desbloqueado!!");
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("Exception: " + e.Message);
-                }
-            }
         }
 
-        public void MostrarRegistro()
+       /* public void MostrarRegistro()
         {
             string opc;
             do
@@ -535,8 +457,8 @@ namespace BILTIFUL.Core
                 }
                 Console.ReadKey();
             } while (opc != "0");
-        }
-        public void LocalizarRegistro()
+        }*/
+        public void LocalizarRegistro(SqlConnection connection)
         {
             string opc;
             do
@@ -565,7 +487,7 @@ namespace BILTIFUL.Core
                         do
                         {
                             Console.Write("\t\t\t\t\tDigite o cpf que deseja localizar: ");
-                            cpf = Console.ReadLine();
+                            cpf = Console.ReadLine().Trim().Replace(".", "").Replace("-", "");
                             if (!ValidaCpf(cpf))
                             {
                                 Console.WriteLine("\t\t\t\t\tCPF INVÁLIDO, TENTE NOVAMENTE!");
@@ -573,19 +495,29 @@ namespace BILTIFUL.Core
                         } while (ValidaCpf(cpf) != true);
                         Console.Clear();
 
-                        Cliente localizarcliente = cadastros.clientes.Find(p => p.CPF == (cpf));
-                        if (localizarcliente != null)
+                        connection.Open();
+
+                        String localizacliente = "SELECT cpf, nome, dnascimento, sexo, ucompra, dcadastro, situacao FROM dbo.Cliente where cpf = " + cpf;
+
+                        using (SqlCommand command = new SqlCommand(localizacliente, connection))
                         {
-                            encontrado = true;
-                            Console.WriteLine(localizarcliente.DadosCliente());
+                            using (SqlDataReader reader = command.ExecuteReader())
+                            {
+                                while (reader.Read())
+                                {
+                                    Console.WriteLine("CPF: {0}\nNome: {1}\nData de Nascimento: {2}\nSexo: {3}\nUltima Compra: {4}\nData de Cadastro: {5}\nSituação:{6}", reader.GetString(0), reader.GetString(1), reader.GetDateTime(2).ToString("dd/MM/yyyy"),(Sexo)char.Parse(reader.GetString(3)), reader.GetDateTime(4).ToString("dd/MM/yyyy"), reader.GetDateTime(5).ToString("dd/MM/yyyy"), (Situacao)char.Parse(reader.GetString(6)));
+                                    encontrado = true;
+                                }
+                            }
                         }
+                        connection.Close();
                         break;
                     case "2":
                         string cnpj;
                         do
                         {
                             Console.Write("\t\t\t\t\tDigite o cnpj que deseja localizar: ");
-                            cnpj = Console.ReadLine().Trim().Replace(".", "").Replace("-", "").Replace("/", "");                            
+                            cnpj = Console.ReadLine().Trim().Replace(".", "").Replace("-", "").Replace("/", "");
                             if (!ValidaCnpj(cnpj))
                             {
                                 Console.WriteLine("\t\t\t\t\tCNPJ INVÁLIDO, TENTE NOVAMENTE!");
@@ -593,34 +525,65 @@ namespace BILTIFUL.Core
                         } while (ValidaCnpj(cnpj) != true);
                         Console.Clear();
 
-                        Fornecedor localizarfornecedor = cadastros.fornecedores.Find(p => p.CNPJ == cnpj);
-                        if (localizarfornecedor != null)
+                        connection.Open();
+
+                        String localizafornecedor = "SELECT cnpj, rsocial, dabertura, ucompra, dcadastro, situacao FROM dbo.Fornecedor where cnpj = '" + cnpj + "'";
+
+                        using (SqlCommand command = new SqlCommand(localizafornecedor, connection))
                         {
-                            encontrado = true;
-                            Console.WriteLine(localizarfornecedor.DadosFornecedor());
+                            using (SqlDataReader reader = command.ExecuteReader())
+                            {
+                                while (reader.Read())
+                                {
+                                    Console.WriteLine("CNPJ: {0}\nRazão social: {1}\nData de Abertura: {2}\nUltima Compra: {3}\nData de Cadastro: {4}\nSituação:{5}", reader.GetString(0), reader.GetString(1), reader.GetDateTime(2).ToString("dd/MM/yyyy"), reader.GetDateTime(3).ToString("dd/MM/yyyy"), reader.GetDateTime(4).ToString("dd/MM/yyyy"), (Situacao)char.Parse(reader.GetString(5)));
+                                    encontrado = true;
+                                }
+                            }
                         }
+                        connection.Close();
                         break;
                     case "3":
                         Console.Write("\t\t\t\t\tDigite o nome que deseja localizar: ");
-                        string nomeMateriaPrima = Console.ReadLine().Trim().ToLower();
-                        List<MPrima> localizarmprima = cadastros.materiasprimas.FindAll(p => p.Nome.ToLower() == nomeMateriaPrima);
-                        if (localizarmprima != null)
+                        string nomeMateriaPrima = Console.ReadLine().Trim();
+                        Console.Clear();
+                        connection.Open();
+
+                        String localizamprima = "SELECT id, nome, ucompra, dcadastro, situacao FROM dbo.MPrima where nome = '" + nomeMateriaPrima + "'";
+
+                        using (SqlCommand command = new SqlCommand(localizamprima, connection))
                         {
-                            encontrado = true;
-                            localizarmprima.ForEach(p => Console.WriteLine(p.DadosMateriaPrima()));
+                            using (SqlDataReader reader = command.ExecuteReader())
+                            {
+                                while (reader.Read())
+                                {
+                                    Console.WriteLine("ID: {0}\nNome: {1}\nUltima Compra: {2}\nData de Cadastro: {3}\nSituação:{4}", reader.GetString(0), reader.GetString(1), reader.GetDateTime(2).ToString("dd/MM/yyyy"), reader.GetDateTime(3).ToString("dd/MM/yyyy"), (Situacao)char.Parse(reader.GetString(4)));
+                                    encontrado = true;
+                                }
+                            }
                         }
+                        connection.Close();
                         break;
                     case "4":
                         Console.Write("\t\t\t\t\tDigite o nome do produto que deseja localizar: ");
-                        string nomeProduto = Console.ReadLine().Trim().ToLower();
-                        List<Produto> localizaProduto = cadastros.produtos.FindAll(p => p.Nome.ToLower() == nomeProduto);
-                        if (localizaProduto != null)
+                        string nomeProduto = Console.ReadLine().Trim();
+                        connection.Open();
+
+                        String localizaproduto = "SELECT cbarras, nome, vvenda, ucompra, dcadastro, situacao FROM dbo.Produto where nome = '" + nomeProduto + "'";
+
+                        using (SqlCommand command = new SqlCommand(localizaproduto, connection))
                         {
-                            encontrado = true;
-                            localizaProduto.ForEach(p => Console.WriteLine(p.DadosProduto()));
+                            using (SqlDataReader reader = command.ExecuteReader())
+                            {
+                                while (reader.Read())
+                                {
+                                    Console.WriteLine("Codigo de barras: {0}\nNome: {1}\nValor de Venda: {2}\nUltima compra: {3}\nData de Cadastro: {4}\nSituação:{5}", reader.GetString(0), reader.GetString(1), reader.GetDecimal(2), reader.GetDateTime(3).ToString("dd/MM/yyyy"), reader.GetDateTime(4).ToString("dd/MM/yyyy"), (Situacao)char.Parse(reader.GetString(5)));
+                                    encontrado = true;
+                                }
+                            }
                         }
+                        connection.Close();
                         break;
-                    case "5":
+                    /*case "5":
                         Console.Write("\t\t\t\t\tDigite a data de venda que deseja localizar(dd/mm/aaaa): ");
                         DateTime dvenda = DateTime.Parse(Console.ReadLine());
                         List<Venda> localizavenda = cadastros.vendas.FindAll(p => p.DataVenda == dvenda);
@@ -676,7 +639,7 @@ namespace BILTIFUL.Core
                                 }
                             }
                         }
-                        break;
+                        break;*/
                     case "0":
                         break;
                     default:
@@ -689,224 +652,224 @@ namespace BILTIFUL.Core
             } while (opc != "0");
         }
 
-       /* public void EditarRegistros()
-        {
-            string opc;
-            do
-            {
-                Console.Clear();
-                Console.WriteLine("\t\t\t\t\t________________________________________________");
-                Console.WriteLine("\t\t\t\t\t|++++++++++++++| MENU DE EDIÇÃO |++++++++++++++|");
-                Console.WriteLine("\t\t\t\t\t|1| - EDITAR CLIENTES                          |");
-                Console.WriteLine("\t\t\t\t\t|2| - EDITAR FORNECEDORES                      |");
-                Console.WriteLine("\t\t\t\t\t|3| - EDITAR MATERIAS PRIMAS                   |");
-                Console.WriteLine("\t\t\t\t\t|4| - EDITAR PRODUTOS                          |");
-                Console.WriteLine("\t\t\t\t\t|0| - VOLTAR                                   |");
-                Console.Write("\t\t\t\t\t|_________________________________________________|\n" +
-                              "\t\t\t\t\t|Opção: ");
-                Console.WriteLine("\t________________________________________________");
-                Console.WriteLine("\t|++++++++++++++| MENU DE EDIÇÃO |++++++++++++++|");
-                Console.WriteLine("\t|1| - EDITAR CLIENTES                          |");
-                Console.WriteLine("\t|2| - EDITAR FORNECEDORES                      |");
-                Console.WriteLine("\t|3| - EDITAR MATERIAS PRIMAS                   |");
-                Console.WriteLine("\t|4| - EDITAR PRODUTOS                          |");
-                Console.WriteLine("\t|0| - VOLTAR                                   |");
-                Console.Write("\t|______________________________________________|\n" +
-                              "\t|Opção: ");
-                opc = Console.ReadLine();
-                bool encontrado = false;
-                Console.Clear();
-                switch (opc)
-                {
+        /* public void EditarRegistros()
+         {
+             string opc;
+             do
+             {
+                 Console.Clear();
+                 Console.WriteLine("\t\t\t\t\t________________________________________________");
+                 Console.WriteLine("\t\t\t\t\t|++++++++++++++| MENU DE EDIÇÃO |++++++++++++++|");
+                 Console.WriteLine("\t\t\t\t\t|1| - EDITAR CLIENTES                          |");
+                 Console.WriteLine("\t\t\t\t\t|2| - EDITAR FORNECEDORES                      |");
+                 Console.WriteLine("\t\t\t\t\t|3| - EDITAR MATERIAS PRIMAS                   |");
+                 Console.WriteLine("\t\t\t\t\t|4| - EDITAR PRODUTOS                          |");
+                 Console.WriteLine("\t\t\t\t\t|0| - VOLTAR                                   |");
+                 Console.Write("\t\t\t\t\t|_________________________________________________|\n" +
+                               "\t\t\t\t\t|Opção: ");
+                 Console.WriteLine("\t________________________________________________");
+                 Console.WriteLine("\t|++++++++++++++| MENU DE EDIÇÃO |++++++++++++++|");
+                 Console.WriteLine("\t|1| - EDITAR CLIENTES                          |");
+                 Console.WriteLine("\t|2| - EDITAR FORNECEDORES                      |");
+                 Console.WriteLine("\t|3| - EDITAR MATERIAS PRIMAS                   |");
+                 Console.WriteLine("\t|4| - EDITAR PRODUTOS                          |");
+                 Console.WriteLine("\t|0| - VOLTAR                                   |");
+                 Console.Write("\t|______________________________________________|\n" +
+                               "\t|Opção: ");
+                 opc = Console.ReadLine();
+                 bool encontrado = false;
+                 Console.Clear();
+                 switch (opc)
+                 {
 
-                    case "1":
-                        string cpf;
-                        do
-                        {
-                            Console.Write("\t\t\t\t\tDigite o CPF do cliente que deseja alterar: ");
-                            cpf = Console.ReadLine();
-                            Console.Write("Digite o CPF do cliente que deseja alterar: ");
-                            cpf = Console.ReadLine().Replace(".", "").Replace("-", "");
-                            if (!ValidaCpf(cpf))
-                            {
-                                Console.WriteLine("\t\t\t\t\tCPF INVÁLIDO, TENTE NOVAMENTE!");
-                            }
-                        } while (ValidaCpf(cpf) != true);
-                        Console.Clear();
+                     case "1":
+                         string cpf;
+                         do
+                         {
+                             Console.Write("\t\t\t\t\tDigite o CPF do cliente que deseja alterar: ");
+                             cpf = Console.ReadLine();
+                             Console.Write("Digite o CPF do cliente que deseja alterar: ");
+                             cpf = Console.ReadLine().Replace(".", "").Replace("-", "");
+                             if (!ValidaCpf(cpf))
+                             {
+                                 Console.WriteLine("\t\t\t\t\tCPF INVÁLIDO, TENTE NOVAMENTE!");
+                             }
+                         } while (ValidaCpf(cpf) != true);
+                         Console.Clear();
 
-                        Cliente localizarcliente = cadastros.clientes.Find(p => p.CPF == long.Parse(cpf));
-                        if (localizarcliente != null)
-                        {
-                            string opca;
-                            encontrado = true;
-                            Console.WriteLine(localizarcliente.DadosCliente());
-                            do
-                            {
-                                Console.WriteLine("\n\n\t\t\t\t\tSOMENTE O NOME É POSSÍVEL ALTERAR!");
-                                Console.WriteLine("\t\t\t\t\tDeseja alterar o nome? [S - Sim] [N - Não] ");
-                                opcao = Console.ReadLine().ToUpper();
-                                if (opcao == "S")
-                                Console.WriteLine("\n\nSOMENTE O NOME É POSSÍVEL ALTERAR!");
-                                Console.WriteLine("Deseja alterar o nome? [S - Sim] [N - Não] ");
-                                opca = Console.ReadLine().ToUpper();
-                                if (opca == "S")
-                                {
-                                    Console.Write("\n\t\t\t\t\tInforme o novo Nome: ");
-                                    string novoNome = Console.ReadLine();
-                                    localizarcliente.Nome = novoNome;
-                                    Console.WriteLine(localizarcliente.DadosCliente());
-                                    Console.WriteLine("\t\t\t\t\tNOVO NOME ALTERADO COM SUCESSO!");
-                                    Console.ReadLine();//////////
-                                    Console.WriteLine("NOVO NOME ALTERADO COM SUCESSO!");
-                                    Console.ReadLine();
-                                    new Controle(localizarcliente);
+                         Cliente localizarcliente = cadastros.clientes.Find(p => p.CPF == long.Parse(cpf));
+                         if (localizarcliente != null)
+                         {
+                             string opca;
+                             encontrado = true;
+                             Console.WriteLine(localizarcliente.DadosCliente());
+                             do
+                             {
+                                 Console.WriteLine("\n\n\t\t\t\t\tSOMENTE O NOME É POSSÍVEL ALTERAR!");
+                                 Console.WriteLine("\t\t\t\t\tDeseja alterar o nome? [S - Sim] [N - Não] ");
+                                 opcao = Console.ReadLine().ToUpper();
+                                 if (opcao == "S")
+                                 Console.WriteLine("\n\nSOMENTE O NOME É POSSÍVEL ALTERAR!");
+                                 Console.WriteLine("Deseja alterar o nome? [S - Sim] [N - Não] ");
+                                 opca = Console.ReadLine().ToUpper();
+                                 if (opca == "S")
+                                 {
+                                     Console.Write("\n\t\t\t\t\tInforme o novo Nome: ");
+                                     string novoNome = Console.ReadLine();
+                                     localizarcliente.Nome = novoNome;
+                                     Console.WriteLine(localizarcliente.DadosCliente());
+                                     Console.WriteLine("\t\t\t\t\tNOVO NOME ALTERADO COM SUCESSO!");
+                                     Console.ReadLine();//////////
+                                     Console.WriteLine("NOVO NOME ALTERADO COM SUCESSO!");
+                                     Console.ReadLine();
+                                     new Controle(localizarcliente);
 
-                                    Console.ReadLine();
-                                    break;
-                                }
-                                else if (opca == "N")
-                                {
-                                    Console.Clear();
-                                    Console.WriteLine("\t\t\t\t\tALTERAÇÃO CANCELADA");
-                                    break;
-                                }
-                            } while (opca != "S" || opca != "N");
-                        }
-                        break;
-                    case "2":
-                        string cnpj, opc2 = null;
-                        do
-                        {
-                            Console.Write("\t\t\t\t\tDigite o cnpj que deseja localizar: ");
-                            cnpj = Console.ReadLine();
-                            if (!ValidaCnpj(cnpj))
-                            Console.Write("Digite o cnpj que deseja localizar: ");
-                            cnpj = Console.ReadLine().Replace(".", "").Replace("/", "").Replace("-", "");
-                            if (ValidaCnpj(cnpj))
-                            {
-                                Console.WriteLine("\t\t\t\t\tCNPJ INVÁLIDO, TENTE NOVAMENTE!");
-                            }
-                        } while (ValidaCnpj(cnpj) != true);
-                        Console.Clear();
+                                     Console.ReadLine();
+                                     break;
+                                 }
+                                 else if (opca == "N")
+                                 {
+                                     Console.Clear();
+                                     Console.WriteLine("\t\t\t\t\tALTERAÇÃO CANCELADA");
+                                     break;
+                                 }
+                             } while (opca != "S" || opca != "N");
+                         }
+                         break;
+                     case "2":
+                         string cnpj, opc2 = null;
+                         do
+                         {
+                             Console.Write("\t\t\t\t\tDigite o cnpj que deseja localizar: ");
+                             cnpj = Console.ReadLine();
+                             if (!ValidaCnpj(cnpj))
+                             Console.Write("Digite o cnpj que deseja localizar: ");
+                             cnpj = Console.ReadLine().Replace(".", "").Replace("/", "").Replace("-", "");
+                             if (ValidaCnpj(cnpj))
+                             {
+                                 Console.WriteLine("\t\t\t\t\tCNPJ INVÁLIDO, TENTE NOVAMENTE!");
+                             }
+                         } while (ValidaCnpj(cnpj) != true);
+                         Console.Clear();
 
-                        Fornecedor localizarfornecedor = cadastros.fornecedores.Find(p => p.CNPJ == long.Parse(cnpj));
-                        if (localizarfornecedor != null)
-                        {
-                            encontrado = true;
-                            Console.WriteLine(localizarfornecedor.DadosFornecedor());
-                        }
-                                Fornecedor localizarfornecedor = cadastros.fornecedores.Find(p => p.CNPJ == long.Parse(cnpj));
-                                if (localizarfornecedor != null)
-                                {
-                                    encontrado = true;
-                                    Console.WriteLine(localizarfornecedor.DadosFornecedor());
-                                }
-                                else
-                                {
-                                    Console.WriteLine("CNPJ não encontrado");
-                                    Console.ReadLine();
-                                }
-                                Console.WriteLine("CNPJ INVÁLIDO, TENTE NOVAMENTE!");
-                                Console.WriteLine("Deseja Procurar novamente? [S - sim] [N - Não]");
-                                opc2 = Console.ReadLine().ToUpper();
-                                if (opc2 == "N")
-                                {
-                                    break;
-                                }
-                                Console.Clear();
-                            }
-                        } while (opc2 != "S");
-                        Console.Clear();
-                       
-                        
-                        break;
-                    case "3":
-                        Console.Write("\t\t\t\t\tDigite o nome que deseja localizar: ");
-                        string nomeMateriaPrima = Console.ReadLine().Trim().ToLower();
-                        List<MPrima> localizarmprima = cadastros.materiasprimas.FindAll(p => p.Nome.ToLower() == nomeMateriaPrima);
-                        if (localizarmprima != null)
-                        {
-                            encontrado = true;
-                            localizarmprima.ForEach(p => Console.WriteLine(p.DadosMateriaPrima()));
-                        }
-                        break;
-                    case "4":
-                        Console.Write("\t\t\t\t\tDigite o nome do produto que deseja localizar: ");
-                        string nomeProduto = Console.ReadLine().Trim().ToLower();
-                        List<Produto> localizaProduto = cadastros.produtos.FindAll(p => p.Nome.ToLower() == nomeProduto);
-                        if (localizaProduto != null)
-                        {
-                            encontrado = true;
-                            localizaProduto.ForEach(p => Console.WriteLine(p.DadosProduto()));
-                        }
-                        break;
-                    case "5":
-                        Console.Write("\t\t\t\t\tDigite a data de venda que deseja localizar(dd/mm/aaaa): ");
-                        DateTime dvenda = DateTime.Parse(Console.ReadLine());
-                        List<Venda> localizavenda = cadastros.vendas.FindAll(p => p.DataVenda == dvenda);
-                        if (localizavenda != null)
-                        {
-                            encontrado = true;
-                            foreach (Venda p in localizavenda)
-                            {
-                                Console.WriteLine(p.DadosVenda());
-                                Console.WriteLine("\t\t\t\t\tItens: ");
-                                foreach (ItemVenda i in cadastros.itensvenda)
-                                {
-                                    if (i.Id == p.Id)
-                                        Console.WriteLine(i.DadosItemVenda());
-                                }
-                            }
-                        }
-                        break;
-                    case "6":
-                        Console.Write("\t\t\t\t\tDigite o data de compra que deseja localizar(dd/mm/aaaa): ");
-                        DateTime dcompra = DateTime.Parse(Console.ReadLine());
-                        List<Compra> localizacompra = cadastros.compras.FindAll(p => p.DataCompra == dcompra);
-                        if (localizacompra != null)
-                        {
-                            encontrado = true;
-                            foreach (Compra p in localizacompra)
-                            {
-                                Console.WriteLine(p.DadosCompra());
-                                Console.WriteLine("\t\t\t\t\tItens: ");
-                                foreach (ItemCompra i in cadastros.itenscompra)
-                                {
-                                    if (i.Id == p.Id)
-                                        Console.WriteLine(i.DadosItemCompra());
-                                }
-                            }
-                        }
-                        break;
-                    case "7":
-                        Console.Write("\t\t\t\t\tDigite o data de produção que deseja localizar(dd/mm/aaaa): ");
-                        DateTime dproducao = DateTime.Parse(Console.ReadLine());
-                        List<Producao> localizaproducao = cadastros.producao.FindAll(p => p.DataProducao == dproducao);
-                        if (localizaproducao != null)
-                        {
-                            encontrado = true;
-                            foreach (Producao p in localizaproducao)
-                            {
-                                Console.WriteLine(p.DadosProducao());
-                                Console.WriteLine("\t\t\t\t\tItens: ");
-                                foreach (ItemProducao i in cadastros.itensproducao)
-                                {
-                                    if (i.Id == p.Id)
-                                        Console.WriteLine(i.DadosItemProducao());
-                                }
-                            }
-                        }
-                        break;
-                    case "0":
-                        break;
-                    default:
-                        Console.WriteLine("\t\t\t\t\tOpção invalida");
-                        break;
-                }
-                if (encontrado == false && opc != "0")
-                    Console.WriteLine("\t\t\t\t\tRegistro não encontrado");
-                Console.ReadKey();
-            } while (opc != "0");
-        }*/
+                         Fornecedor localizarfornecedor = cadastros.fornecedores.Find(p => p.CNPJ == long.Parse(cnpj));
+                         if (localizarfornecedor != null)
+                         {
+                             encontrado = true;
+                             Console.WriteLine(localizarfornecedor.DadosFornecedor());
+                         }
+                                 Fornecedor localizarfornecedor = cadastros.fornecedores.Find(p => p.CNPJ == long.Parse(cnpj));
+                                 if (localizarfornecedor != null)
+                                 {
+                                     encontrado = true;
+                                     Console.WriteLine(localizarfornecedor.DadosFornecedor());
+                                 }
+                                 else
+                                 {
+                                     Console.WriteLine("CNPJ não encontrado");
+                                     Console.ReadLine();
+                                 }
+                                 Console.WriteLine("CNPJ INVÁLIDO, TENTE NOVAMENTE!");
+                                 Console.WriteLine("Deseja Procurar novamente? [S - sim] [N - Não]");
+                                 opc2 = Console.ReadLine().ToUpper();
+                                 if (opc2 == "N")
+                                 {
+                                     break;
+                                 }
+                                 Console.Clear();
+                             }
+                         } while (opc2 != "S");
+                         Console.Clear();
+
+
+                         break;
+                     case "3":
+                         Console.Write("\t\t\t\t\tDigite o nome que deseja localizar: ");
+                         string nomeMateriaPrima = Console.ReadLine().Trim().ToLower();
+                         List<MPrima> localizarmprima = cadastros.materiasprimas.FindAll(p => p.Nome.ToLower() == nomeMateriaPrima);
+                         if (localizarmprima != null)
+                         {
+                             encontrado = true;
+                             localizarmprima.ForEach(p => Console.WriteLine(p.DadosMateriaPrima()));
+                         }
+                         break;
+                     case "4":
+                         Console.Write("\t\t\t\t\tDigite o nome do produto que deseja localizar: ");
+                         string nomeProduto = Console.ReadLine().Trim().ToLower();
+                         List<Produto> localizaProduto = cadastros.produtos.FindAll(p => p.Nome.ToLower() == nomeProduto);
+                         if (localizaProduto != null)
+                         {
+                             encontrado = true;
+                             localizaProduto.ForEach(p => Console.WriteLine(p.DadosProduto()));
+                         }
+                         break;
+                     case "5":
+                         Console.Write("\t\t\t\t\tDigite a data de venda que deseja localizar(dd/mm/aaaa): ");
+                         DateTime dvenda = DateTime.Parse(Console.ReadLine());
+                         List<Venda> localizavenda = cadastros.vendas.FindAll(p => p.DataVenda == dvenda);
+                         if (localizavenda != null)
+                         {
+                             encontrado = true;
+                             foreach (Venda p in localizavenda)
+                             {
+                                 Console.WriteLine(p.DadosVenda());
+                                 Console.WriteLine("\t\t\t\t\tItens: ");
+                                 foreach (ItemVenda i in cadastros.itensvenda)
+                                 {
+                                     if (i.Id == p.Id)
+                                         Console.WriteLine(i.DadosItemVenda());
+                                 }
+                             }
+                         }
+                         break;
+                     case "6":
+                         Console.Write("\t\t\t\t\tDigite o data de compra que deseja localizar(dd/mm/aaaa): ");
+                         DateTime dcompra = DateTime.Parse(Console.ReadLine());
+                         List<Compra> localizacompra = cadastros.compras.FindAll(p => p.DataCompra == dcompra);
+                         if (localizacompra != null)
+                         {
+                             encontrado = true;
+                             foreach (Compra p in localizacompra)
+                             {
+                                 Console.WriteLine(p.DadosCompra());
+                                 Console.WriteLine("\t\t\t\t\tItens: ");
+                                 foreach (ItemCompra i in cadastros.itenscompra)
+                                 {
+                                     if (i.Id == p.Id)
+                                         Console.WriteLine(i.DadosItemCompra());
+                                 }
+                             }
+                         }
+                         break;
+                     case "7":
+                         Console.Write("\t\t\t\t\tDigite o data de produção que deseja localizar(dd/mm/aaaa): ");
+                         DateTime dproducao = DateTime.Parse(Console.ReadLine());
+                         List<Producao> localizaproducao = cadastros.producao.FindAll(p => p.DataProducao == dproducao);
+                         if (localizaproducao != null)
+                         {
+                             encontrado = true;
+                             foreach (Producao p in localizaproducao)
+                             {
+                                 Console.WriteLine(p.DadosProducao());
+                                 Console.WriteLine("\t\t\t\t\tItens: ");
+                                 foreach (ItemProducao i in cadastros.itensproducao)
+                                 {
+                                     if (i.Id == p.Id)
+                                         Console.WriteLine(i.DadosItemProducao());
+                                 }
+                             }
+                         }
+                         break;
+                     case "0":
+                         break;
+                     default:
+                         Console.WriteLine("\t\t\t\t\tOpção invalida");
+                         break;
+                 }
+                 if (encontrado == false && opc != "0")
+                     Console.WriteLine("\t\t\t\t\tRegistro não encontrado");
+                 Console.ReadKey();
+             } while (opc != "0");
+         }*/
     }
 }

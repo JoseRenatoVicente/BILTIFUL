@@ -14,13 +14,12 @@ namespace BILTIFUL.Core.Entidades
         {
         }
 
-        public ItemVenda(string id,string produto, string qtd, string valorunitario, string totalitem)
+        public ItemVenda(string id,string produto, string qtd)
         {
             Id = id;
             this.Produto = produto;
             this.Quantidade = qtd;
-            ValorUnitario = valorunitario;
-            this.TotalItem = totalitem;
+
         }
 
         public ItemVenda(string id,string produto, string quantidade, string valorUnitario)

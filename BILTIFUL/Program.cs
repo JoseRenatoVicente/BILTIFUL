@@ -1,9 +1,10 @@
 ﻿using BILTIFUL.Core.Controles;
+
+using BILTIFUL.Core;
+using System;
 using BILTIFUL.ModuloCompra;
 using BILTIFUL.ModuloProducao;
 using BILTIFUL.ModuloVenda;
-using BILTIFUL.Core;
-using System;
 
 namespace BILTIFUL
 {
@@ -42,25 +43,25 @@ namespace BILTIFUL
 
                 case "1":
                     Console.Clear();
-                    producaoService.SubMenu();
+                    producaoService.InstanciaBanco();
                     BackMenu();
                     break;
 
                 case "2":
                     Console.Clear();
-                    compraService.SubMenu();
+                    compraService.InstanciaBanco();
                     BackMenu();
                     break;
 
                 case "3":
                     Console.Clear();
-                    vendaService.SubMenu();
+                    vendaService.InstanciaBanco();
                     BackMenu();
                     break;
 
                 case "4":
                     Console.Clear();
-                    cadastroService.SubMenu();
+                    cadastroService.InstanciaBanco();
                     BackMenu();
                     break;
 

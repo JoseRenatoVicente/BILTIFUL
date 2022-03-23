@@ -1,8 +1,11 @@
 ﻿using BILTIFUL.Core;
 using BILTIFUL.Core.Controles;
 using BILTIFUL.Core.Entidades;
+using BILTIFUL.Core.Entidades.Enums;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -16,22 +19,14 @@ namespace BILTIFUL.ModuloCompra
     {
         CadastroService cadastroService = new CadastroService();
 
-        //List<Fornecedor> testes = new List<Fornecedor>();
-        //public void AdicionarFornecedor()
-        //{
-
-        //    testes.Add(new Fornecedor(1, "fornecedor1"));
-        //    testes.Add(new Fornecedor(2, "fornecedor2"));
-        //}
         string cnpj;
-        public void SubMenu()
+        public void SubMenu(SqlConnection connection)
         {
             Console.Clear();
             Console.WriteLine("\n\t\t\t\t\t __________________________________________________");
             Console.WriteLine("\t\t\t\t\t|+++++++++++++++++++| COMPRAS |+++++++++++++++++++|");
             Console.WriteLine("\t\t\t\t\t|1| - CADASTRAR COMPRA                            |");
             Console.WriteLine("\t\t\t\t\t|2| - LOCALIZAR COMPRA                            |");
-            Console.WriteLine("\t\t\t\t\t|3| - EXIBIR COMPRAS CADASTRADAS                  |");
             Console.WriteLine("\t\t\t\t\t|0| - SAIR                                        |");
             Console.Write("\t\t\t\t\t|_________________________________________________|\n" +
                           "\t\t\t\t\t|Opção: ");
@@ -40,17 +35,11 @@ namespace BILTIFUL.ModuloCompra
             switch (opc)
             {
                 case "1":
-                    CadastrarCompra();
+                    CadastrarCompra(connection);
 
                     break;
                 case "2":
-                    LocalizarCompra(cadastroService.cadastros.compras, cadastroService.cadastros.itenscompra);
-                    break;
-                case "3":
-                    if (cadastroService.cadastros.compras.Count() != 0)
-                        new Registros(cadastroService.cadastros.compras, cadastroService.cadastros.itenscompra);
-                    else
-                        Console.WriteLine("\t\t\t\t\tNenhum produto registrado");
+                    cadastroService.LocalizarRegistro(connection);
                     break;
                 case "0":
                     break;
@@ -58,129 +47,13 @@ namespace BILTIFUL.ModuloCompra
                     break;
             }
         }
-
-        public void LocalizarCompra(List<Compra> compras, List<ItemCompra> itens)
+        public void InstanciaBanco()
         {
-            string opc;
-            do
-            {
-
-                Console.Clear();
-                Console.WriteLine("\t\t\t\t\t________________________________________________");
-                Console.WriteLine("\t\t\t\t\t|++++++++++++| MENU DE LOCALIZAÇÃO |+++++++++++|");
-                Console.WriteLine("\t\t\t\t\t|1| - LOCALIZAR POR DATA                       |");
-                Console.WriteLine("\t\t\t\t\t|2| - LOCALIZAR POR FORNECEDOR                 |");
-                Console.WriteLine("\t\t\t\t\t|3| - LOCALIZAR POR ID                         |");
-                Console.WriteLine("\t\t\t\t\t|0| - VOLTAR                                   |");
-                Console.Write("\t\t\t\t\t|______________________________________________|\n" +
-                              "\t\t\t\t\t|Opção: ");
-                opc = Console.ReadLine();
-                bool encontrado = false;
-                Console.Clear();
-                switch (opc)
-                {
-                    case "1":
-                        Console.Write("\t\t\t\t\tDigite o data de compra que deseja localizar(dd/mm/aaaa): ");
-                        DateTime dcompra = DateTime.Parse(Console.ReadLine());
-                        List<Compra> localizacompra = cadastroService.cadastros.compras.FindAll(p => p.DataCompra == dcompra);
-                        if (localizacompra != null)
-                        {
-
-                            foreach (Compra p in localizacompra)
-                            {
-                                Console.WriteLine(p.DadosCompra());
-                                Console.WriteLine("\t\t\t\t\tItens: ");
-                                foreach (ItemCompra i in cadastroService.cadastros.itenscompra)
-                                {
-                                    if (i.Id == p.Id)
-                                        Console.WriteLine(i.DadosItemCompra());
-                                    encontrado = true;
-                                }
-                                Console.ReadKey();
-                            }
-                        }
-                        if (encontrado != true)
-                        {
-                            Console.WriteLine("\t\t\t\t\tNenhuma compra encontrada");
-                            Console.ReadKey();
-                        }
-
-                        break;
-
-                    case "2":
-
-                        bool saida = false;
-
-                        Console.Write("\t\t\t\t\tDigite o CNPJ do fornecedor que deseja localizar: ");
-
-                        cnpj = Console.ReadLine().Trim().Replace(".", "").Replace("-", "").Replace("/", "");
-                        saida = true;
-                        List<Compra> localizacnpj = cadastroService.cadastros.compras.FindAll(p => p.Fornecedor == cnpj);
-                        if (localizacnpj != null)
-                        {
-
-                            foreach (Compra p in localizacnpj)
-                            {
-                                Console.WriteLine(p.DadosCompra());
-                                Console.WriteLine("\t\t\t\t\tItens: ");
-                                foreach (ItemCompra i in cadastroService.cadastros.itenscompra)
-                                {
-                                    if (i.Id == p.Id)
-                                        Console.WriteLine(i.DadosItemCompra());
-                                    encontrado = true;
-                                }
-                                Console.ReadKey();
-                            }
-                        }
-                        if (encontrado != true)
-                        {
-                            Console.WriteLine("\t\t\t\t\tNenhuma compra encontrada");
-                            Console.ReadKey();
-                        }
-
-                        break;
-                    case "3":
-                        Console.Write("\t\t\t\t\tDigite o ID da compra que deseja localizar: ");
-                        string idCompra = Console.ReadLine();
-                        List<Compra> localizaId = cadastroService.cadastros.compras.FindAll(p => p.Id == idCompra);
-                        if (localizaId != null)
-                        {
-
-                            foreach (Compra p in localizaId)
-                            {
-                                Console.WriteLine(p.DadosCompra());
-                                Console.WriteLine("\t\t\t\t\tItens: ");
-                                foreach (ItemCompra i in cadastroService.cadastros.itenscompra)
-                                {
-                                    if (i.Id == p.Id)
-                                        Console.WriteLine(i.DadosItemCompra());
-                                    encontrado = true;
-                                }
-                                Console.ReadKey();
-                            }
-                        }
-                        if (encontrado != true)
-                        {
-                            Console.WriteLine("\t\t\t\t\tNenhuma compra encontrada");
-                            Console.ReadKey();
-                        }
-
-                        break;
-                    case "0":
-                        SubMenu();
-                        break;
-                    default:
-                        Console.WriteLine("Selecione uma opcao valida");
-                        break;
-                }
-
-            } while (opc != "0");
+            Controle conexao = new Controle();
+            SubMenu(conexao.connection);
         }
 
-
-
-
-        public void CadastrarCompra()
+        public void CadastrarCompra(SqlConnection connection)
         {
 
 
@@ -194,22 +67,54 @@ namespace BILTIFUL.ModuloCompra
 
 
                 cnpj = Console.ReadLine().Trim().Replace(".", "").Replace("-", "").Replace("/", "");
+                bool bloqueado = false;
 
+                connection.Open();
+                String fornecedorbloqueado = "SELECT cnpj_fornecedor FROM dbo.Bloqueado";
+                using (SqlCommand command = new SqlCommand(fornecedorbloqueado, connection))
+                {
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            if (cnpj == reader.GetString(0))
+                                bloqueado = true;
+                        }
+                    }
+                }
+                connection.Close();
 
-                if (BuscarBloqueado(cnpj, cadastroService.cadastros.bloqueados))
+                if (bloqueado == true)
                 {
                     Console.WriteLine("\t\t\t\t\tFornecedor bloqueado para compra");
                     return;
                 }
 
-                Fornecedor fornecedorCompra = BuscarCnpj(cnpj.ToString(), cadastroService.cadastros.fornecedores);
-                if (fornecedorCompra == null)
+                bool fornecedoencontrado = false;
+                connection.Open();
+                String localizafornecedor = "SELECT cnpj, rsocial, ucompra FROM dbo.Fornecedor";
+                using (SqlCommand command = new SqlCommand(localizafornecedor, connection))
+                {
+                    using (SqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            if (cnpj == reader.GetString(0))
+                            {
+                                Console.WriteLine("CNPJ: {0}\nRazão social: {1}\nUltima Compra: {2}", reader.GetString(0), reader.GetString(1), reader.GetDateTime(2).ToString("dd/MM/yyyy"));
+                                fornecedoencontrado = true;
+                            }
+                        }
+                    }
+                }
+                connection.Close();
+               
+                if (fornecedoencontrado == false)
                 {
                     Console.WriteLine("\t\t\t\t\tFornecedor nao encontrado.");
                 }
                 else
                 {
-                    Console.WriteLine(fornecedorCompra.DadosFornecedorCompra());
                     Console.WriteLine("\t\t\t\t\t------------------------------");
                     do
                     {
@@ -230,11 +135,11 @@ namespace BILTIFUL.ModuloCompra
                 }
 
             } while (opc != "S");
-            ItemCompra();
+            ItemCompra(connection);
 
 
         }
-        public void ItemCompra()
+        public void ItemCompra(SqlConnection connection)
         {
             int cont = 0;
             string saida = "a";
@@ -256,33 +161,59 @@ namespace BILTIFUL.ModuloCompra
                 {
                     opcp = "a";
                     string buscarMPrima;
+                    bool encontramateriaprima = false;
                     Console.Clear();
                     do
                     {
+                        encontramateriaprima = false;
                         Console.Write("\t\t\t\t\tInforme o nome da Materia-Prima : ");
                         buscarMPrima = Console.ReadLine();
-                    } while (ImprimirMPrima(cadastroService.cadastros.materiasprimas, buscarMPrima) != true);
+                        connection.Open();
+
+                        String localizamprima = "SELECT id, nome, ucompra, dcadastro FROM dbo.MPrima where nome = '" + buscarMPrima + "'";
+
+                        using (SqlCommand command = new SqlCommand(localizamprima, connection))
+                        {
+                            using (SqlDataReader reader = command.ExecuteReader())
+                            {
+                                while (reader.Read())
+                                {
+                                    Console.WriteLine("ID: {0}\nNome: {1}\nUltima Compra: {2}\nData de Cadastro: {3}", reader.GetString(0), reader.GetString(1), reader.GetDateTime(2).ToString("dd/MM/yyyy"), reader.GetDateTime(3).ToString("dd/MM/yyyy"));
+                                    encontramateriaprima = true;
+                                }
+                            }
+                        }
+                        connection.Close();
+                    } while (encontramateriaprima != true);
+
                     MPrima mPrimaCompra;
-                    bool buscar = true;
+                    bool buscar = false;
                     do
                     {
                         Console.Write("\t\t\t\t\tInforme o ID referente a Materia-Prima que deseja adicionar : ");
                         idMPrima[cont] = Console.ReadLine().ToUpper();
 
-                        mPrimaCompra = BuscaMPrima(idMPrima[cont], cadastroService.cadastros.materiasprimas);
-                        if (mPrimaCompra == null)
+                        connection.Open();
+
+                        String localizamprima = "SELECT id, nome, ucompra, dcadastro FROM dbo.MPrima where id = '" + idMPrima[cont] + "'";
+
+                        using (SqlCommand command = new SqlCommand(localizamprima, connection))
                         {
+                            using (SqlDataReader reader = command.ExecuteReader())
+                            {
+                                while (reader.Read())
+                                {
+                                    Console.WriteLine("ID: {0}\nNome: {1}", reader.GetString(0), reader.GetString(1));
+                                    buscar = true;
+                                }
+                            }
+                        }
+                        connection.Close();
+                        if (buscar == false)
                             Console.WriteLine("\t\t\t\t\tMateria-Prima nao encontrada.");
-                            buscar = false;
-
-                        }
                         else
-                        {
                             buscar = true;
-                        }
                     } while (buscar != true);
-
-                    Console.WriteLine(mPrimaCompra.DadosMateriaPrima());
                     Console.WriteLine("\t\t\t\t\t-------------------------------------------");
                     do
                     {
@@ -388,16 +319,14 @@ namespace BILTIFUL.ModuloCompra
             string confirmar = Console.ReadLine();
             if (confirmar == "S")
             {
-                string cod = "" + (++cadastroService.cadastros.codigos[3]);
-                cadastroService.SalvarCodigos();
+                string cod = "" + (cadastroService.NumeroElementos("Compra", connection)+1);
                 string valorTotalString = (valorTotal.ToString("F2"));
                 valorTotalString = valorTotalString.Trim().Replace(".", "").Replace(",", "");
 
 
 
-                Compra compra = new Compra(cod, cnpj, valorTotalString);
-                cadastroService.cadastros.compras.Add(compra);
-                new Controle(compra);
+                Compra compra = new Compra(cod, cnpj);
+                new Controle(compra, connection);
                 for (int i = 0; i < cont; i++)
                 {
 
@@ -405,14 +334,19 @@ namespace BILTIFUL.ModuloCompra
                     totalItemString[i] = totalItemString[i].Trim().Replace(".", "").Replace(",", "");
 
 
-                    ItemCompra itemCompra = new ItemCompra(cod, idMPrima[i], quantidadeString[i], stringValor[i], totalItemString[i]);
-                    new Controle(itemCompra);
-                    cadastroService.cadastros.itenscompra.Add(itemCompra);
+                    ItemCompra itemCompra = new ItemCompra(cod, idMPrima[i], quantidadeString[i], stringValor[i]);
+                    new Controle(itemCompra,connection);
                 }
+                connection.Open();
+                SqlCommand sql_cmnd = new SqlCommand("CompraVtotal", connection);
+                sql_cmnd.CommandType = CommandType.StoredProcedure;
+                sql_cmnd.Parameters.AddWithValue("@id", SqlDbType.Decimal).Value = compra.Id;
+                sql_cmnd.ExecuteNonQuery();
+                connection.Close();
             }
             else
             {
-                SubMenu();
+                SubMenu(connection);
             }
         }
 

@@ -1,0 +1,36 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "a9bd9095-1b14-4060-bd68-4d320cd754ae": {
+      "ProjectGuid": "a9bd9095-1b14-4060-bd68-4d320cd754ae",
+      "DisplayName": "BILTIFUL.Core",
+      "ColorIndex": 0
+    },
+    "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3": {
+      "ProjectGuid": "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3",
+      "DisplayName": "Arquivos Diversos",
+      "ColorIndex": -1
+    },
+    "0a1b445b-a0ba-4507-afc1-38a40d9740a2": {
+      "ProjectGuid": "0a1b445b-a0ba-4507-afc1-38a40d9740a2",
+      "DisplayName": "BILTIFUL.ModuloProducao",
+      "ColorIndex": 1
+    },
+    "a7c6147f-337b-43e9-b9c9-53a08505ea72": {
+      "ProjectGuid": "a7c6147f-337b-43e9-b9c9-53a08505ea72",
+      "DisplayName": "BILTIFUL",
+      "ColorIndex": 2
+    },
+    "248ab38a-4a1f-45b3-afbc-19cd3e49c158": {
+      "ProjectGuid": "248ab38a-4a1f-45b3-afbc-19cd3e49c158",
+      "DisplayName": "BILTIFUL.ModuloCompra",
+      "ColorIndex": 3
+    },
+    "8a387b1d-0033-40fc-97fa-625ace27c0d9": {
+      "ProjectGuid": "8a387b1d-0033-40fc-97fa-625ace27c0d9",
+      "DisplayName": "BILTIFUL.ModuloVenda",
+      "ColorIndex": 4
+    }
+  },
+  "NextColorIndex": 5
+}

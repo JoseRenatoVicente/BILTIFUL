@@ -16,13 +16,12 @@ namespace BILTIFUL.Core.Entidades
         {
         }
 
-        public ItemCompra(string id,string materiaPrima, string quantidade, string valorUnitario,string totalitem)
+        public ItemCompra(string id,string materiaPrima, string quantidade, string valorUnitario)
         {
             Id = id.PadLeft(5,'0');
             MateriaPrima = materiaPrima;
             Quantidade = quantidade.PadLeft(5,'0');
             ValorUnitario = valorUnitario.PadLeft(5, '0');
-            TotalItem = totalitem.PadLeft(6,'0');
         }
 
         public ItemCompra(string id, DateTime dataCompra, string materiaPrima, string quantidade, string valorUnitario, string totalItem)

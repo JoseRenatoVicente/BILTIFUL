@@ -14,11 +14,10 @@ namespace BILTIFUL.Core.Entidades
 
         }
 
-        public Compra( string id , string fornecedor, string valorTotal)//criação
+        public Compra( string id , string fornecedor)//criação
         {
             Id = id.PadLeft(5,'0');
             Fornecedor = fornecedor;
-            ValorTotal = valorTotal.PadLeft(7,'0');
         }
 
         public Compra(string id,DateTime dataCompra, string fornecedor, string valorTotal)//leitura

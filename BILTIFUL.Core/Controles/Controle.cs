@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -12,489 +14,269 @@ namespace BILTIFUL.Core.Controles
     public class Controle
     {
         //uma lista para cada arquivos que eu tiver
-        public List<int> codigos { get; set; }
-        public List<Cliente> clientes { get; set; }
-        public List<Produto> produtos { get; set; }
-        public List<Fornecedor> fornecedores { get; set; }
-        public List<MPrima> materiasprimas { get; set; }
-        public List<Compra> compras { get; set; }
-        public List<ItemCompra> itenscompra { get; set; }
-        public List<Producao> producao { get; set; }
-        public List<ItemProducao> itensproducao { get; set;}
-        public List<Venda> vendas { get; set; }
-        public List<ItemVenda> itensvenda { get; set; }
-        public List<string> inadimplentes { get; set; }
-        public List<string> bloqueados { get; set; }
-
-
+        public SqlConnection connection { get; set; }
 
         public Controle()//esse construtora instanciará todas as listas qnd feito
         {
-            //instancia cada lista qnd o programa é iniciado
-            codigos = new List<int>();
-            clientes = new List<Cliente>();
-            produtos = new List<Produto>();
-            fornecedores = new List<Fornecedor>();
-            materiasprimas = new List<MPrima>();
-            compras = new List<Compra>(); //
-            itenscompra = new List<ItemCompra>(); //adicionar arquivos
-            producao = new List<Producao>(); //
-            itensproducao = new List<ItemProducao>();//
-            vendas = new List<Venda>();//
-            itensvenda = new List<ItemVenda>();//
-            inadimplentes = new List<string>();
-            bloqueados = new List<string>();
-            
             try
             {
-                StreamReader sr;
-                string line;
+                var datasource = @"DESKTOP-BTO2B72";//instancia do servidor
+                var database = "BILTIFUL"; //Base de Dados
+                var username = "sa"; //usuario da conexão
+                var password = "locao2.0"; //senha
 
-                if (!Directory.Exists("Arquivos"))
-                {
-                    Directory.CreateDirectory("Arquivos");
-                }
+                //sua string de conexão 
+                string connString = @"Data Source=" + datasource + ";Initial Catalog="
+                            + database + ";Persist Security Info=True;User ID=" + username + ";Password=" + password;
 
-                //LISTA CONTROLE
-                if (File.Exists("Arquivos\\Controle.dat"))
-                {
-                    sr = new StreamReader("Arquivos\\Controle.dat");//le o arquivo controle
-                    line = sr.ReadLine();
-                    while (line != null)
-                    {
-                        codigos.Add(int.Parse(line));//adicionando na minha lista codigo linha por linha
-                        line = sr.ReadLine();
-                    }
-                    sr.Close();
-                }
-                else
-                {
-                    StreamWriter streamWriter = new StreamWriter("Arquivos\\Controle.dat");
-                    streamWriter.WriteLine("0");//Produto
-                    streamWriter.WriteLine("0");//Materia Prima
-                    streamWriter.WriteLine("0");//Venda
-                    streamWriter.WriteLine("0");//Compra
-                    streamWriter.WriteLine("0");//Produção
-                    streamWriter.Close();
-
-                }
-
-                //LISTA CLIENTES
-                if (File.Exists("Arquivos\\Clientes.dat"))
-                {
-                    sr = new StreamReader("Arquivos\\Clientes.dat");
-                    line = sr.ReadLine();
-                    while (line != null)
-                    {
-                        string cpf = line.Substring(0, 11);
-                        string nome = line.Substring(11, 50).Trim();
-                        DateTime dnascimento = DateTime.Parse(line.Substring(61, 10));
-                        Sexo sexo = (Sexo)char.Parse(line.Substring(71, 1));
-                        DateTime ucompra = DateTime.Parse(line.Substring(72, 10));
-                        DateTime dcadastro = DateTime.Parse(line.Substring(82, 10));
-                        Situacao situacao = (Situacao)char.Parse(line.Substring(92, 1));
-                        clientes.Add(new Cliente(cpf, nome, dnascimento, sexo, ucompra, dcadastro, situacao));
-                        line = sr.ReadLine();
-                    }
-                    sr.Close();
-                }
-
-                //LISTA FORNECEDORES
-                if (File.Exists("Arquivos\\Fornecedor.dat"))
-                {
-                    sr = new StreamReader("Arquivos\\Fornecedor.dat");
-                    line = sr.ReadLine();
-                    while (line != null)
-                    {
-                        string cnpj = line.Substring(0, 14);
-                        string rsocial = line.Substring(14, 50).Trim();
-                        DateTime dabertura = DateTime.Parse(line.Substring(64, 10));
-                        DateTime ucompra = DateTime.Parse(line.Substring(74, 10));
-                        DateTime dcadastro = DateTime.Parse(line.Substring(84, 10));
-                        Situacao situacao = (Situacao)char.Parse(line.Substring(94, 1));
-                        fornecedores.Add(new Fornecedor(cnpj, rsocial, dabertura, ucompra, dcadastro, situacao));
-                        line = sr.ReadLine();
-                    }
-                    sr.Close();
-                }
-
-                //LISTA PRODUTOS
-                if (File.Exists("Arquivos\\Cosmetico.dat"))
-                {
-                    sr = new StreamReader("Arquivos\\Cosmetico.dat");
-                    line = sr.ReadLine();
-                    while (line != null)
-                    {
-                        string cbarras = line.Substring(0, 12);
-                        string nome = line.Substring(12, 20).Trim();
-                        string vvendas = line.Substring(32, 5);
-                        DateTime uvenda = DateTime.Parse(line.Substring(37, 10));
-                        DateTime dcadastro = DateTime.Parse(line.Substring(47, 10));
-                        Situacao situacao = (Situacao)char.Parse(line.Substring(57, 1));
-                        produtos.Add(new Produto(cbarras, nome, vvendas, uvenda, dcadastro, situacao));
-                        line = sr.ReadLine();
-                    }
-                    sr.Close();
-                }
-
-                //LISTA MATERIA PRIMA
-                if (File.Exists("Arquivos\\Materia.dat"))
-                {
-                    sr = new StreamReader("Arquivos\\Materia.dat");
-                    line = sr.ReadLine();
-                    while (line != null)
-                    {
-                        string cod = line.Substring(0, 6);
-                        string nome = line.Substring(6, 20).Trim();
-                        DateTime ucompra = DateTime.Parse(line.Substring(26, 10));
-                        DateTime dcadastro = DateTime.Parse(line.Substring(36, 10));
-                        Situacao situacao = (Situacao)char.Parse(line.Substring(46, 1));
-                        materiasprimas.Add(new MPrima(cod, nome, ucompra, dcadastro, situacao));
-                        line = sr.ReadLine();
-                    }
-                    sr.Close();
-                }
-
-                //LISTA INADIMPLENTES
-                if (File.Exists("Arquivos\\Risco.dat"))
-                {
-                    sr = new StreamReader("Arquivos\\Risco.dat");//le o arquivo controle
-                    line = sr.ReadLine();
-                    while (line != null)
-                    {
-                        inadimplentes.Add(line);//adicionando na minha lista codigo linha por linha
-                        line = sr.ReadLine();
-                    }
-                    sr.Close();
-                }
-
-                //LISTA BLOQUEADOS
-                if (File.Exists("Arquivos\\Bloqueado.dat"))
-                {
-                    sr = new StreamReader("Arquivos\\Bloqueado.dat");//le o arquivo controle
-                    line = sr.ReadLine();
-                    while (line != null)
-                    {
-                        bloqueados.Add(line);//adicionando na minha lista codigo linha por linha
-                        line = sr.ReadLine();
-                    }
-                    sr.Close();
-                }
-
-                //COMPRA
-                if (File.Exists("Arquivos\\Compra.dat"))
-                {
-                    sr = new StreamReader("Arquivos\\Compra.dat");
-                    line = sr.ReadLine();
-                    while (line != null)
-                    {
-                        string cod = line.Substring(0, 5);
-                        DateTime dcompra = DateTime.Parse(line.Substring(5, 10));
-                        string cnpj = line.Substring(15, 14);
-                        string valor = line.Substring(29, 7);
-                        compras.Add(new Compra(cod,dcompra,cnpj,valor));
-                        line = sr.ReadLine();
-                    }
-                    sr.Close();
-                }
-
-                //ITEM COMPRA
-                if (File.Exists("Arquivos\\ItemCompra.dat"))
-                {
-                    sr = new StreamReader("Arquivos\\ItemCompra.dat");
-                    line = sr.ReadLine();
-                    while (line != null)
-                    {
-                        string cod = line.Substring(0, 5);
-                        DateTime dcompra = DateTime.Parse(line.Substring(5, 10));
-                        string materiaprima = line.Substring(15, 6);
-                        string quantidade = line.Substring(21, 5);
-                        string valoruni = line.Substring(26, 5);
-                        string valortotal = line.Substring(31, 6);
-                        itenscompra.Add(new ItemCompra(cod,dcompra,materiaprima,quantidade,valoruni,valortotal));
-                        line = sr.ReadLine();
-                    }
-                    sr.Close();
-                }
-
-                //PRODUCAO
-                if (File.Exists("Arquivos\\Producao.dat"))
-                {
-                    sr = new StreamReader("Arquivos\\Producao.dat");
-                    line = sr.ReadLine();
-                    while (line != null)
-                    {
-                        string cod = line.Substring(0, 5);
-                        DateTime dproducao = DateTime.Parse(line.Substring(5, 10));
-                        string produto = line.Substring(15, 12);
-                        string quantidade = line.Substring(27, 5);
-                        producao.Add(new Producao(cod, dproducao, produto, quantidade));
-                        line = sr.ReadLine();
-                    }
-                    sr.Close();
-                }
-
-                //ITENS PRODUCAO
-                if (File.Exists("Arquivos\\ItemProducao.dat"))
-                {
-                    sr = new StreamReader("Arquivos\\ItemProducao.dat");
-                    line = sr.ReadLine();
-                    while (line != null)
-                    {
-                        string cod = line.Substring(0, 5);
-                        DateTime dproducao = DateTime.Parse(line.Substring(5, 10));
-                        string mprima = line.Substring(15, 6);
-                        string quantidadeMateriaPrima = line.Substring(21, 5);
-                        itensproducao.Add(new ItemProducao(cod, dproducao, mprima, quantidadeMateriaPrima));
-                        line = sr.ReadLine();
-                    }
-                    sr.Close();
-                }
-
-                //VENDAS
-                if (File.Exists("Arquivos\\Venda.dat"))
-                {
-                    sr = new StreamReader("Arquivos\\Venda.dat");
-                    line = sr.ReadLine();
-                    while (line != null)
-                    {
-                        string id = line.Substring(0, 5);
-                        DateTime dvenda = DateTime.Parse(line.Substring(5, 10));
-                        string cliente = line.Substring(15, 11);
-                        string vtotal = line.Substring(26, 7);
-                        vendas.Add(new Venda(id, dvenda, cliente, vtotal));
-                        line = sr.ReadLine();
-                    }
-                    sr.Close();
-                }
-
-                //ITENS VENDAS
-                if (File.Exists("Arquivos\\ItemVenda.dat"))
-                {
-                    sr = new StreamReader("Arquivos\\ItemVenda.dat");
-                    line = sr.ReadLine();
-                    while (line != null)
-                    {
-                        string id = line.Substring(0, 5);
-                        string produto = (line.Substring(5, 12));
-                        string quantidade = line.Substring(17, 3);
-                        string vunit = line.Substring(20, 5);
-                        string total = line.Substring(25, 6);
-                        itensvenda.Add(new ItemVenda(id, produto, quantidade, vunit, total));
-                        line = sr.ReadLine();
-                    }
-                    sr.Close();
-                }
+                //cria a instância de conexão com a base de dados
+                connection = new SqlConnection(connString);
             }
-            catch (Exception e)
+            catch (SqlException e)
             {
-                Console.WriteLine("Exception: " + e.Message);
+                Console.WriteLine(e.ToString());
             }
         }
-        public Controle(Cliente cliente)
+        public Controle(Cliente cliente, SqlConnection connection)
         {
+
             if (cliente != null)
             {
-                try//envia cliente para arquivo como novo cliente]try
-                {
-                    StreamWriter sw = new StreamWriter("Arquivos\\Clientes.dat", append: true);
-                    sw.WriteLine(cliente.ConverterParaEDI());
-                    sw.Close();
-                    Console.WriteLine("\n\t\t\t\t\tCliente cadastrado com sucesso!");
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("Exception: " + e.Message);
-                }
+
+                connection.Open();
+                SqlCommand sql_cmnd = new SqlCommand("AdicionarCliente", connection);
+                sql_cmnd.CommandType = CommandType.StoredProcedure;
+                sql_cmnd.Parameters.AddWithValue("@cpf", SqlDbType.VarChar).Value = cliente.CPF;
+                sql_cmnd.Parameters.AddWithValue("@nome", SqlDbType.NVarChar).Value = cliente.Nome;
+                sql_cmnd.Parameters.AddWithValue("@dnascimento", SqlDbType.Date).Value = cliente.DataNascimento.ToString("yyyy/MM/dd");
+                sql_cmnd.Parameters.AddWithValue("@sexo", SqlDbType.Char).Value = (char)cliente.Sexo;
+                sql_cmnd.ExecuteNonQuery();
+
+                connection.Close();
             }
+
         }
-        public Controle(Fornecedor fornecedor)
+        public Controle(Fornecedor fornecedor, SqlConnection connection)
         {
+
             if (fornecedor != null)
             {
-                try//envia cliente para arquivo como novo cliente]try
-                {
-                    StreamWriter sw = new StreamWriter("Arquivos\\Fornecedor.dat", append: true);
-                    sw.WriteLine(fornecedor.ConverterParaEDI());
-                    sw.Close();
-                    Console.WriteLine("\n\t\t\t\t\tFornecedor cadastrado com sucesso!");
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("Exception: " + e.Message);
-                }
+
+                connection.Open();
+                SqlCommand sql_cmnd = new SqlCommand("AdicionarFornecedor", connection);
+                sql_cmnd.CommandType = CommandType.StoredProcedure;
+                sql_cmnd.Parameters.AddWithValue("@cnpj", SqlDbType.VarChar).Value = fornecedor.CNPJ;
+                sql_cmnd.Parameters.AddWithValue("@rsocial", SqlDbType.NVarChar).Value = fornecedor.RazaoSocial;
+                sql_cmnd.Parameters.AddWithValue("@dabertura", SqlDbType.Date).Value = fornecedor.DataAbertura.ToString("yyyy/MM/dd");
+                sql_cmnd.ExecuteNonQuery();
+
+                connection.Close();
             }
+
         }
-        public Controle(Produto produto)
+        public Controle(Produto produto, SqlConnection connection)
         {
+
             if (produto != null)
             {
-                try//envia cliente para arquivo como novo cliente]try
-                {
-                    StreamWriter sw = new StreamWriter("Arquivos\\Cosmetico.dat", append: true);
-                    sw.WriteLine(produto.ConverterParaEDI());
-                    sw.Close();
-                    Console.WriteLine("\n\t\t\t\t\tProduto cadastrado com sucesso!");
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("Exception: " + e.Message);
-                }
+
+                connection.Open();
+                SqlCommand sql_cmnd = new SqlCommand("AdicionarProduto", connection);
+                sql_cmnd.CommandType = CommandType.StoredProcedure;
+                sql_cmnd.Parameters.AddWithValue("@cbarras", SqlDbType.VarChar).Value = produto.CodigoBarras;
+                sql_cmnd.Parameters.AddWithValue("@nome", SqlDbType.NVarChar).Value = produto.Nome;
+                sql_cmnd.Parameters.AddWithValue("@vvenda", SqlDbType.Decimal).Value = produto.ValorVenda.Insert(3, ".");
+
+                sql_cmnd.ExecuteNonQuery();
+
+                connection.Close();
             }
 
         }
-        public Controle(MPrima materiaprima)
+        public Controle(MPrima materiaprima, SqlConnection connection)
         {
+
             if (materiaprima != null)
             {
-                try//envia cliente para arquivo como novo cliente]try
-                {
-                    StreamWriter sw = new StreamWriter("Arquivos\\Materia.dat", append: true);
-                    sw.WriteLine(materiaprima.ConverterParaEDI());
-                    sw.Close();
-                    Console.WriteLine("\n\t\t\t\t\tMateria prima cadastrado com sucesso!");
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("Exception: " + e.Message);
-                }
+                connection.Open();
+                SqlCommand sql_cmnd = new SqlCommand("AdicionarMPrima", connection);
+                sql_cmnd.CommandType = CommandType.StoredProcedure;
+                sql_cmnd.Parameters.AddWithValue("@id", SqlDbType.VarChar).Value = materiaprima.Id;
+                sql_cmnd.Parameters.AddWithValue("@nome", SqlDbType.NVarChar).Value = materiaprima.Nome;
+                sql_cmnd.ExecuteNonQuery();
+                connection.Close();
             }
+
         }
-        public Controle(Compra compra)
+        public Controle(Compra compra, SqlConnection connection)
         {
+
             if (compra != null)
             {
-                try//envia cliente para arquivo como novo cliente]try
-                {
-                    StreamWriter sw = new StreamWriter("Arquivos\\Compra.dat", append: true);
-                    sw.WriteLine(compra.ConverterParaEDI());
-                    sw.Close();
-                    Console.WriteLine("\n\t\t\t\t\tCompra cadastrada cadastrado com sucesso!");
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("Exception: " + e.Message);
-                }
+                connection.Open();
+
+                SqlCommand sql_cmnd = new SqlCommand("AdicionarCompra", connection);
+                sql_cmnd.CommandType = CommandType.StoredProcedure;
+                sql_cmnd.Parameters.AddWithValue("@id", SqlDbType.VarChar).Value = compra.Id;
+                sql_cmnd.Parameters.AddWithValue("@cnpj_fornecedor", SqlDbType.NVarChar).Value = compra.Fornecedor;
+                sql_cmnd.ExecuteNonQuery();
+
+                connection.Close();
             }
+
         }
-        public Controle(ItemCompra itemcompra)
+        public Controle(ItemCompra itemcompra, SqlConnection connection)
         {
+
             if (itemcompra != null)
             {
-                try//envia cliente para arquivo como novo cliente]try
-                {
-                    StreamWriter sw = new StreamWriter("Arquivos\\ItemCompra.dat", append: true);
-                    sw.WriteLine(itemcompra.ConverterParaEDI());
-                    sw.Close();
-                    Console.WriteLine("\n\t\t\t\t\tItem de Compra cadastrado sucesso!");
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("Exception: " + e.Message);
-                }
+                connection.Open();
+                SqlCommand sql_cmnd = new SqlCommand("AdicionarItemCompra", connection);
+                sql_cmnd.CommandType = CommandType.StoredProcedure;
+                sql_cmnd.Parameters.AddWithValue("@qtd", SqlDbType.Decimal).Value = itemcompra.Quantidade.Insert(3,".");
+                sql_cmnd.Parameters.AddWithValue("@vunitario", SqlDbType.VarChar).Value = itemcompra.ValorUnitario.Insert(3, ".");
+                sql_cmnd.Parameters.AddWithValue("@id_compra", SqlDbType.VarChar).Value = itemcompra.Id;
+                sql_cmnd.Parameters.AddWithValue("@id_mprima", SqlDbType.VarChar).Value = itemcompra.MateriaPrima;
+                sql_cmnd.ExecuteNonQuery();
+                connection.Close();
             }
+
         }
-        public Controle(Producao producao)
+        public Controle(Producao producao, SqlConnection connection)
         {
+
             if (producao != null)
             {
-                try//envia cliente para arquivo como novo cliente]try
-                {
-                    StreamWriter sw = new StreamWriter("Arquivos\\Producao.dat", append: true);
-                    sw.WriteLine(producao.ConverterParaEDI());
-                    sw.Close();
-                    Console.WriteLine("\n\t\t\t\t\tProdução cadastrada com sucesso!");
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("Exception: " + e.Message);
-                }
+
+                connection.Open();
+                SqlCommand sql_cmnd = new SqlCommand("AdicionarProducao", connection);
+                sql_cmnd.CommandType = CommandType.StoredProcedure;
+                sql_cmnd.Parameters.AddWithValue("@id", SqlDbType.VarChar).Value = producao.Id;
+                sql_cmnd.Parameters.AddWithValue("@qtd", SqlDbType.Int).Value = int.Parse(producao.Quantidade);
+                sql_cmnd.Parameters.AddWithValue("@cbarras_produto", SqlDbType.VarChar).Value = producao.Produto;
+                sql_cmnd.ExecuteNonQuery();
+                connection.Close();
             }
         }
-        public Controle(ItemProducao itemproducao)
+        public Controle(ItemProducao itemproducao, SqlConnection connection)
         {
+
             if (itemproducao != null)
             {
-                try//envia cliente para arquivo como novo cliente]try
-                {
-                    StreamWriter sw = new StreamWriter("Arquivos\\ItemProducao.dat", append: true);
-                    sw.WriteLine(itemproducao.ConverterParaEDI());
-                    sw.Close();
-                    Console.WriteLine("\n\t\t\t\t\tItem de produção cadastrado com sucesso!");
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("Exception: " + e.Message);
-                }
+
+                connection.Open();
+                SqlCommand sql_cmnd = new SqlCommand("AdicionarItemProducao", connection);
+                sql_cmnd.CommandType = CommandType.StoredProcedure;
+                sql_cmnd.Parameters.AddWithValue("@qtdmp", SqlDbType.Decimal).Value = itemproducao.QuantidadeMateriaPrima.ToString().PadLeft(5,'0').Insert(3,".");
+                sql_cmnd.Parameters.AddWithValue("@id_producao", SqlDbType.VarChar).Value = itemproducao.Id;
+                sql_cmnd.Parameters.AddWithValue("@id_mprima", SqlDbType.VarChar).Value = itemproducao.MateriaPrima;
+                sql_cmnd.ExecuteNonQuery();
+
+                connection.Close();
             }
+
         }
-        public Controle(Venda venda)
+        public Controle(Venda venda, SqlConnection connection)
         {
+
             if (venda != null)
             {
-                try//envia cliente para arquivo como novo cliente]try
-                {
-                    StreamWriter sw = new StreamWriter("Arquivos\\Venda.dat", append: true);
-                    sw.WriteLine(venda.ConverterParaEDI());
-                    sw.Close();
-                    //Console.WriteLine("\n\t\t\t\t\tItem de produção cadastrado com sucesso!");
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("Exception: " + e.Message);
-                }
+
+                connection.Open();
+                SqlCommand sql_cmnd = new SqlCommand("AdicionarVenda", connection);
+                sql_cmnd.CommandType = CommandType.StoredProcedure;
+                sql_cmnd.Parameters.AddWithValue("@id", SqlDbType.VarChar).Value = venda.Id;
+                sql_cmnd.Parameters.AddWithValue("@cpf_cliente", SqlDbType.NVarChar).Value = venda.Cliente;
+                sql_cmnd.ExecuteNonQuery();
+                connection.Close();
+
             }
+
         }
-        public Controle(ItemVenda itemvenda)
+        public Controle(ItemVenda itemvenda, SqlConnection connection)
         {
+
             if (itemvenda != null)
             {
-                try//envia cliente para arquivo como novo cliente]try
-                {
-                    StreamWriter sw = new StreamWriter("Arquivos\\ItemVenda.dat", append: true);
-                    sw.WriteLine(itemvenda.ConverterParaEDI());
-                    sw.Close();
-                    //Console.WriteLine("\n\t\t\t\t\tItem de produção cadastrado com sucesso!");
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("Exception: " + e.Message);
-                }
+
+                connection.Open();
+                SqlCommand sql_cmnd = new SqlCommand("AdicionarItemVenda", connection);
+                sql_cmnd.CommandType = CommandType.StoredProcedure;
+                sql_cmnd.Parameters.AddWithValue("@qtd", SqlDbType.Decimal).Value = int.Parse(itemvenda.Quantidade);
+                sql_cmnd.Parameters.AddWithValue("@id_venda", SqlDbType.VarChar).Value = itemvenda.Id;
+                sql_cmnd.Parameters.AddWithValue("@cbarras_produto", SqlDbType.VarChar).Value = itemvenda.Produto;
+                sql_cmnd.ExecuteNonQuery();
+                connection.Close();
             }
         }
 
 
-        public Controle(string chave)
+        public Controle(string chave, bool escolha, SqlConnection connection)//true adicionar e false deletar
         {
-            
-            if (CadastroService.ValidaCpf(chave))
+
+            if (escolha == true)
             {
-                try//envia cliente para arquivo como novo cliente]try
+
+                if (CadastroService.ValidaCpf(chave))
                 {
-                    StreamWriter sw = new StreamWriter("Arquivos\\Risco.dat", append: true);
-                    sw.WriteLine(chave);
-                    sw.Close();
-                    Console.WriteLine("\n\t\t\t\t\tCliente cadastrado como inadimplente!");
+
+
+                    connection.Open();
+                    SqlCommand sql_cmnd = new SqlCommand("AdicionarInadimplente", connection);
+                    sql_cmnd.CommandType = CommandType.StoredProcedure;
+                    sql_cmnd.Parameters.AddWithValue("@cpf_cliente", SqlDbType.VarChar).Value = chave;
+                    sql_cmnd.ExecuteNonQuery();
+                    connection.Close();
+
+
                 }
-                catch (Exception e)
+
+                if (CadastroService.ValidaCnpj(chave))
                 {
-                    Console.WriteLine("Exception: " + e.Message);
+
+                    using (connection)
+                    {
+                        connection.Open();
+                        SqlCommand sql_cmnd = new SqlCommand("AdicionarBloqueado", connection);
+                        sql_cmnd.CommandType = CommandType.StoredProcedure;
+                        sql_cmnd.Parameters.AddWithValue("@cnpj_fornecedor", SqlDbType.VarChar).Value = chave;
+                        sql_cmnd.ExecuteNonQuery();
+                        connection.Close();
+                    }
+
+                }
+
+            }
+            else
+            {
+                if (CadastroService.ValidaCpf(chave))
+                {
+
+
+                    connection.Open();
+                    SqlCommand sql_cmnd = new SqlCommand("RemoverInadimplente", connection);
+                    sql_cmnd.CommandType = CommandType.StoredProcedure;
+                    sql_cmnd.Parameters.AddWithValue("@cpf_inadimplente", SqlDbType.VarChar).Value = chave;
+                    sql_cmnd.ExecuteNonQuery();
+                    connection.Close();
+
+
+                }
+                if (CadastroService.ValidaCnpj(chave))
+                {
+
+                    connection.Open();
+
+                    SqlCommand sql_cmnd = new SqlCommand("RemoverBloqueado", connection);
+                    sql_cmnd.CommandType = CommandType.StoredProcedure;
+                    sql_cmnd.Parameters.AddWithValue("@cnpj_fornecedor", SqlDbType.VarChar).Value = chave;
+                    sql_cmnd.ExecuteNonQuery();
+                    connection.Close();
+
+
                 }
             }
-            if (CadastroService.ValidaCnpj(chave))
-            {
-                try//envia cliente para arquivo como novo cliente]try
-                {
-                    StreamWriter sw = new StreamWriter("Arquivos\\Bloqueado.dat", append: true);
-                    sw.WriteLine(chave);
-                    sw.Close();
-                    Console.WriteLine("\n\t\t\t\t\tFornecedor bloqueado!");
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("Exception: " + e.Message);
-                }
-            }
+
         }
     }
 
