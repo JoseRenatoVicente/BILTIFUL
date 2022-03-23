@@ -58,7 +58,6 @@ create proc CompraVtotal
 	select @vtotal = @vtotal + titem from Item_Compra where id_compra = @id
 	update Compra set vtotal = @vtotal where id = @id
 end;
-exec CompraVtotal '00001'
 -------
 create proc AdicionarItemCompra
 	@qtd decimal(5,2),
