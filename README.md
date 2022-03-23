@@ -7,4 +7,5 @@ O programa possui um Menu Principal dividido em 4 partes
 Nao estão presentes:<br>
 - Alterar informações de um registro ja cadastrado;<br>
 - Nao contem a opcao de mostrar todos os registros de um determinado tipo, "Mostrar todos os produtos";<br>
-- Não se pode na mesma venda, compra ou producao colocar 2 vezes o mesmo produto/materia prima devido a maneira como o banco foi desenvolvido -> PK(nNenda,cProduto)<br>
+- Não se pode na mesma venda, compra ou producao colocar 2 vezes o mesmo produto/materia prima devido a maneira como o banco foi desenvolvido -> PK(nNenda,cProduto);<br>
+- Contem poucos tratamentos de erro entao pode quebrar colocando valores nao condizentes com o pedido
