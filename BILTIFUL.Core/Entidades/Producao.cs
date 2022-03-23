@@ -1,39 +1,19 @@
 ﻿using BILTIFUL.Core.Entidades.Base;
 using System;
+using System.Collections.Generic;
 
 namespace BILTIFUL.Core.Entidades
 {
-    public class Producao : EntidadeBase
+    public class Producao : EntidadeBase, IEntidadeDataBase<Producao>
     {
         public DateTime DataProducao { get; set; } = DateTime.Now;
-        //ID produto
-        public string Produto { get; set; }
-        public string Quantidade { get; set; }
-
+        public float Quantidade { get; set; }
+        public long Produto { get; set; }
+        public List<ItemProducao> Itens { get; set; }
         public Producao()
         {
         }
 
-        public Producao(string id, string produto, string quantidade)
-        {
-            Id = id;
-            Produto = produto;
-            Quantidade = quantidade;
-        }
-
-        public Producao(string produto, string quantidade)
-        {
-            Produto = produto;
-            Quantidade = quantidade.PadLeft(5, '0');
-        }
-
-        public Producao(string id,DateTime dataProducao, string produto, string quantidade)
-        {
-            Id = id;
-            DataProducao = dataProducao;
-            Produto = produto;
-            Quantidade = quantidade;
-        }
 
         public string Dados()
         {
@@ -43,13 +23,25 @@ namespace BILTIFUL.Core.Entidades
         }
 
 
-        public string ConverterParaEDI()
+        public string ConverterParaDAT()
         {
-            return $"{Id.PadLeft(5, '0')}{DataProducao.ToString("dd/MM/yyyy")}{Produto}{Quantidade.PadLeft(5, '0')}";
+            return $"{Id.ToString().PadLeft(5, '0')}{DataProducao.ToString("dd/MM/yyyy")}{Produto}{Quantidade}";
         }
         public string DadosProducao()
         {
             return $"-------------------------------------------\nId: {Id}\nData produção: {DataProducao}\n-------------------------------------------";
+        }
+
+        public Producao ExtrairDados(string line)
+        {
+            if (line == null) return null;
+
+            Id = int.Parse(line.Substring(0, 5));
+            DataProducao = DateTime.Parse(line.Substring(5, 10));
+            Produto = int.Parse(line.Substring(15, 12));
+            Quantidade = int.Parse(line.Substring(27, 5));
+
+            return this;
         }
     }
 }

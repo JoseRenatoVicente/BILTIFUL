@@ -2,6 +2,7 @@
 {
     public abstract class EntidadeBase
     {
-        public string Id { get; set; }
+        public virtual int Id { get; set; }
+
     }
 }

@@ -4,6 +4,6 @@
     {
         SemInformacao = '0',
         Ativo = 'A',
-        Inativo ='I'
+        Inativo = 'I'
     }
 }

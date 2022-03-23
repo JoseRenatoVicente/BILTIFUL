@@ -3,7 +3,7 @@
     public enum Sexo
     {
         SemInformacao = '0',
-        Masculino ='M',
+        Masculino = 'M',
         Feminino = 'F'
     }
 }

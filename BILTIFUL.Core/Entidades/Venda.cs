@@ -4,58 +4,51 @@ using System.Collections.Generic;
 
 namespace BILTIFUL.Core.Entidades
 {
-    public class Venda : EntidadeBase
+    public class Venda : EntidadeBase, IEntidadeDataBase<Venda>
     {
-        public DateTime DataVenda { get; set; }=DateTime.Now;
+        public DateTime DataVenda { get; set; } = DateTime.Now;
         //CPF
         public string Cliente { get; set; }
-        public string ValorTotal { get; set; }
+        public float ValorTotal { get; set; }
+        public List<ItemVenda> Itens { get; set; }
 
         public Venda()
         {
-
-        }
-        public Venda(string id, string cliente, string valorTotal)
-        {
-            Id = id.PadLeft(5,'0');
-            Cliente = cliente;
-            ValorTotal = valorTotal.PadLeft(7,'0');
+            Itens = new List<ItemVenda>();
         }
 
-        public Venda(string id,DateTime dataVenda, string cliente, string valorTotal)
+        public Venda(string cliente, float valorTotal)
         {
-            Id = id;
-            DataVenda = dataVenda;
             Cliente = cliente;
             ValorTotal = valorTotal;
+            Itens = new List<ItemVenda>();
         }
 
-        public void LocalizarVenda(string buscaid, List<Venda> list)
+        public string Dados()
         {
-            Venda aux = list.Find(i => i.Id == buscaid);
-
-            if (aux == null)
-            {
-                Console.WriteLine("Nenhuma venda encontrada!!");
-            }
-            else
-            {
-                Console.WriteLine(aux.MostrarItemVenda());
-            }
+            return $"--------------------Venda-----------------------\nId: {Id}\nCliente: {Cliente}\nValor total: {ValorTotal}\n-------------------------------------------";
         }
-        public string DadosVenda()
+        public string ConverterParaDAT()
         {
-            return $"-------------------------------------------\nId: {Id}\nCliente: {Cliente}\nValor total: {float.Parse(ValorTotal.Insert(3, ","))}\n-------------------------------------------";
-        }
-        public string ConverterParaEDI()
-        {
-            return $"{Id}{DataVenda.ToString("dd/MM/yyyy")}{Cliente.ToString().PadLeft(11,'0')}{ValorTotal}";
+            return $"{Id}{DataVenda.ToString("dd/MM/yyyy")}{Cliente.ToString().PadLeft(11, '0')}{ValorTotal}";
         }
         public string MostrarItemVenda()
         {
             return $"\n\t\t\t\t\tId = {Id}" +
                    $"\n\t\t\t\t\tCpf: {Cliente}" +
-                   $"\n\t\t\t\t\tValor Total: {float.Parse(ValorTotal.Insert(3, ","))}";
+                   $"\n\t\t\t\t\tValor Total: {ValorTotal}";
+        }
+
+        public Venda ExtrairDados(string line)
+        {
+            if (line == null) return null;
+
+            Id = int.Parse(line.Substring(0, 5));
+            DataVenda = DateTime.Parse(line.Substring(5, 10));
+            Cliente = line.Substring(15, 11);
+            ValorTotal = int.Parse(line.Substring(26, 7));
+
+            return this;
         }
     }
 }

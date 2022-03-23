@@ -12,19 +12,19 @@ namespace BILTIFUL.Core
         public Registros(List<Cliente> clientes)
         {
 
-            int i=0;
+            int i = 0;
             string opc = "-1";
-            while(opc != "0")
+            while (opc != "0")
             {
                 Console.Clear();
                 Console.WriteLine("\t\t\t\t\t>>>>>>>>CLIENTES<<<<<<<<");
-                Console.WriteLine(clientes[i].DadosCliente());
+                Console.WriteLine(clientes[i].Dados());
                 if (i > 0)
                 {
                     Console.WriteLine("\t\t\t\t\t|1-primeiro");
                     Console.WriteLine("\t\t\t\t\t|2-anterior");
                 }
-                if (i < clientes.Count()-1)
+                if (i < clientes.Count() - 1)
                 {
                     Console.WriteLine("\t\t\t\t\t|3-proximo");
                     Console.WriteLine("\t\t\t\t\t|4-ultimo");
@@ -32,27 +32,27 @@ namespace BILTIFUL.Core
                 Console.WriteLine("\t\t\t\t\t|0-Sair");
                 Console.Write("\t\t\t\t\t|Opção: ");
                 opc = Console.ReadLine();
-                switch(opc)
+                switch (opc)
                 {
                     case "1":
                         i = 0;
                         break; ;
                     case "2":
-                        if(i-1>=0)
+                        if (i - 1 >= 0)
                             i--;
                         else
                             Console.WriteLine("\t\t\t\t\tNão existe registro antes deste");
-                            Console.ReadKey();
+                        Console.ReadKey();
                         break;
                     case "3":
-                        if (i+1<= clientes.Count() - 1)
+                        if (i + 1 <= clientes.Count() - 1)
                             i++;
                         else
                             Console.WriteLine("\t\t\t\t\tNão existe registro depois deste");
-                            Console.ReadKey();
+                        Console.ReadKey();
                         break;
                     case "4":
-                        i = clientes.Count()-1;
+                        i = clientes.Count() - 1;
                         break;
                     case "0":
                         break;
@@ -70,13 +70,13 @@ namespace BILTIFUL.Core
             {
                 Console.Clear();
                 Console.WriteLine("\t\t\t\t\t>>>>>>>>FORNECEDORES<<<<<<<<");
-                Console.WriteLine(fornecedor[i].DadosFornecedor());
+                Console.WriteLine(fornecedor[i].Dados());
                 if (i > 0)
                 {
                     Console.WriteLine("\t\t\t\t\t1-primeiro");
                     Console.WriteLine("\t\t\t\t\t2-anterior");
                 }
-                if (i < fornecedor.Count()-1)
+                if (i < fornecedor.Count() - 1)
                 {
                     Console.WriteLine("\t\t\t\t\t3-proximo");
                     Console.WriteLine("\t\t\t\t\t4-ultimo");
@@ -104,7 +104,7 @@ namespace BILTIFUL.Core
                         Console.ReadKey();
                         break;
                     case "4":
-                        i = fornecedor.Count()-1;
+                        i = fornecedor.Count() - 1;
                         break;
                     case "0":
                         break;
@@ -121,7 +121,7 @@ namespace BILTIFUL.Core
             {
                 Console.Clear();
                 Console.WriteLine("\t\t\t\t\t>>>>>>>>MATERIAS PRIMAS<<<<<<<<");
-                Console.WriteLine(materiaprima[i].DadosMateriaPrima());
+                Console.WriteLine(materiaprima[i].Dados());
                 if (i > 0)
                 {
                     Console.WriteLine("\t\t\t\t\t1-primeiro");
@@ -223,10 +223,10 @@ namespace BILTIFUL.Core
             {
                 Console.Clear();
                 Console.WriteLine("\t\t\t\t\t>>>>>>>>COMPRAS<<<<<<<<");
-                Console.WriteLine(compras[i].DadosCompra());
+                Console.WriteLine(compras[i].Dados());
                 Console.WriteLine("\t\t\t\t\tItens da compra: ");
                 List<ItemCompra> itens = itenscompras.FindAll(p => p.Id == compras[i].Id);//encontra todos os itens com mesmo id da compra
-                itens.ForEach(p=>Console.WriteLine(p.DadosItemCompra()));//mostra todos os itens
+                itens.ForEach(p => Console.WriteLine(p.Dados()));//mostra todos os itens
                 if (i > 0)
                 {
                     Console.WriteLine("\t\t\t\t\t1-primeiro");
@@ -280,7 +280,7 @@ namespace BILTIFUL.Core
                 Console.WriteLine(producao[i].DadosProducao());
                 Console.WriteLine("\t\t\t\t\tItens da produção: ");
                 List<ItemProducao> itens = itensproducao.FindAll(p => p.Id == producao[i].Id);//encontra todos os itens com mesmo id da compra
-                itens.ForEach(p => Console.WriteLine(p.DadosItemProducao()));//mostra todos os itens
+                itens.ForEach(p => Console.WriteLine(p.Dados()));//mostra todos os itens
                 if (i > 0)
                 {
                     Console.WriteLine("\t\t\t\t\t1-primeiro");
@@ -331,10 +331,10 @@ namespace BILTIFUL.Core
             {
                 Console.Clear();
                 Console.WriteLine("\t\t\t\t\t>>>>>>>>VENDAS<<<<<<<<");
-                Console.WriteLine(vendas[i].DadosVenda());
+                Console.WriteLine(vendas[i].Dados());
                 Console.WriteLine("\t\t\t\t\tItens da venda: ");
                 List<ItemVenda> itens = itensvendas.FindAll(p => p.Id == vendas[i].Id);//encontra todos os itens com mesmo id da compra
-                itens.ForEach(p => Console.WriteLine(p.DadosItemVenda()));//mostra todos os itens
+                itens.ForEach(p => Console.WriteLine(p.Dados()));//mostra todos os itens
                 if (i > 0)
                 {
                     Console.WriteLine("\t\t\t\t\t1-primeiro");

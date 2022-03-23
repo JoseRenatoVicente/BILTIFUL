@@ -1,27 +1,28 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BILTIFUL;
-using BILTIFUL.Core.Controles;
+﻿using BILTIFUL.Application.Repository;
+using BILTIFUL.Core;
 using BILTIFUL.Core.Entidades;
 using BILTIFUL.Core.Entidades.Enums;
-using BILTIFUL.Core.Banco;
+using System;
+using System.Collections.Generic;
 
-namespace BILTIFUL.Core
+namespace BILTIFUL.Application.Service
 {
     public class CadastroService
     {
+        ProdutoRepository produtoRepository = new ProdutoRepository();
+        VendaRepository vendaRepository = new VendaRepository();
+        ItemVendaRepository itemVendaRepository = new ItemVendaRepository();
+        ProducaoRepository producaoRepository = new ProducaoRepository();
+        ItemProducaoRepository itemProducaoRepository = new ItemProducaoRepository();
+        MateriaPrimaRepository materiaPrimaRepository = new MateriaPrimaRepository();
+        FornecedorRepository fornecedorRepository = new FornecedorRepository();
+        ClienteRepository clienteRepository = new ClienteRepository();
+        CompraRepository compraRepository = new CompraRepository();
+        ItemCompraRepository itemCompraRepository = new ItemCompraRepository();
         public CadastroService()
         {
         }
 
-        public bd_biltiful banco = new bd_biltiful();
-
-        public Controle cadastros = new Controle();
 
         public void SubMenu()
         {
@@ -32,34 +33,54 @@ namespace BILTIFUL.Core
                 switch (opc)
                 {
                     case "1":
+                        Console.Clear();
                         CadastroCliente();
+                        BackSubMenuCadastro();
                         break;
                     case "2":
+                        Console.Clear();
                         CadastroProduto();
+                        BackSubMenuCadastro();
                         break;
                     case "3":
+                        Console.Clear();
                         CadastroFornecedor();
+                        BackSubMenuCadastro();
                         break;
                     case "4":
+                        Console.Clear();
                         CadastroMateriaPrima();
+                        BackSubMenuCadastro();
                         break;
                     case "5":
+                        Console.Clear();
                         CadastroInadimplente();
+                        BackSubMenuCadastro();
                         break;
                     case "6":
+                        Console.Clear();
                         CadastroBloqueado();
+                        BackSubMenuCadastro();
                         break;
                     case "7":
+                        Console.Clear();
                         RemoverInadimplencia();
+                        BackSubMenuCadastro();
                         break;
                     case "8":
+                        Console.Clear();
                         RemoverBloqueio();
+                        BackSubMenuCadastro();
                         break;
                     case "9":
+                        Console.Clear();
                         MostrarRegistro();
+                        BackSubMenuCadastro();
                         break;
                     case "10":
+                        Console.Clear();
                         LocalizarRegistro();
+                        BackSubMenuCadastro();
                         break;
                     case "0":
                         break;
@@ -67,9 +88,17 @@ namespace BILTIFUL.Core
                         Console.WriteLine("Opção invalida!");
                         break;
                 }
-               
-                Console.Clear();
+
+
             } while (opc != "0");
+        }
+
+        public void BackSubMenuCadastro()
+        {
+            Console.WriteLine("\n\t\t\t Pressione qualquer tecla para voltar ao menu de Cadastro...");
+            Console.ReadKey();
+            Console.Clear();
+            SubMenu();
         }
         private string Menu()
         {
@@ -108,7 +137,7 @@ namespace BILTIFUL.Core
                 if (!ValidaCpf(cpf))//valida cpf
                     Console.WriteLine("\t\t\t\t\tCpf invalido!\n\t\t\t\t\tDigite novamente");
             } while (!ValidaCpf(cpf));//enquanto cpf nao for valido digitar denovo
-            if (cadastros.clientes.Find(p => p.CPF == (cpf)) != null)
+            if (clienteRepository.GetByCPF(cpf) != null)
             {
                 Console.WriteLine("\t\t\t\t\tCliente com esse CPF ja existe");
                 return null;
@@ -139,12 +168,7 @@ namespace BILTIFUL.Core
             } while ((csexo != "M") && (csexo != "F"));
             Sexo sexo = (Sexo)char.Parse(csexo);
 
-            Cliente cliente = new Cliente(cpf, nome, dnascimento, sexo);
-
-            banco.InserirClienteBD(cliente);
-            
-
-            return cliente;
+            return clienteRepository.Add(new Cliente(cpf, nome, dnascimento, sexo));
         }
         public static bool ValidaCpf(string cpf)
         {
@@ -195,7 +219,7 @@ namespace BILTIFUL.Core
                     Console.WriteLine("\t\t\t\t\tCnpj invalido!\nDigite novamente");
 
             } while (!ValidaCnpj(cnpj));//enquanto cpf nao for valido digitar denovo
-            if (cadastros.fornecedores.Find(p => p.CNPJ == cnpj) != null)
+            if (fornecedorRepository.GetByCNPJ(cnpj) != null)
             {
                 Console.WriteLine("\t\t\t\t\tFornecedor com esse cnpj ja existe");
                 return null;
@@ -217,10 +241,8 @@ namespace BILTIFUL.Core
                 Console.WriteLine("\t\t\t\t\tDeve ter se passado pelo menos 6 meses desde a abertura!");
                 return null;
             }
-            Fornecedor fornecedor = new Fornecedor(cnpj, rsocial, dabertura);
-            banco.InserirFornecedorBD(fornecedor);
 
-            return fornecedor;
+            return fornecedorRepository.Add(new Fornecedor(cnpj, rsocial, dabertura));
         }
         public static bool ValidaCnpj(string cnpj)
         {
@@ -257,7 +279,7 @@ namespace BILTIFUL.Core
         public Produto CadastroProduto()
         {
             string svalor;
-            int valor;
+            float valor;
             string nome;
             Console.Clear();
             Console.WriteLine("\n\t\t\t\t\t===========CADASTRO PRODUTO===========");
@@ -270,33 +292,13 @@ namespace BILTIFUL.Core
             {
                 Console.Write("\t\t\t\t\tValor($$$,$$)(valor precisa ser menor que 1000,00): ");
                 svalor = Console.ReadLine().Trim().Replace(".", "").Replace(",", "");
-                if (!int.TryParse(svalor, out valor) || (valor > 99999) || (valor <= 0))
+                if (!float.TryParse(svalor, out valor) || (valor > 99999) || (valor <= 0))
                     Console.WriteLine("\t\t\t\t\tValor invalido!");
-            } while (!int.TryParse(svalor, out valor) || (valor > 99999) || (valor <= 0));
+            } while (!float.TryParse(svalor, out valor) || (valor > 99999) || (valor <= 0));
 
-            cadastros.codigos[0]++;
-            SalvarCodigos();
-            string cod = "" + cadastros.codigos[0];
-
-            Produto produto = new Produto(cod, nome, svalor);
-            banco.InserirProdutoBD(produto);
-            return produto;
+            return produtoRepository.Add(new Produto(nome, valor));
         }
-        public void SalvarCodigos()
-        {
-            try
-            {
-                StreamWriter sw = new StreamWriter("Arquivos\\Controle.dat");
 
-                cadastros.codigos.ForEach(c => sw.WriteLine(c));
-
-                sw.Close();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
-        }
         public MPrima CadastroMateriaPrima()
         {
             string nome;
@@ -308,70 +310,69 @@ namespace BILTIFUL.Core
                 nome = Console.ReadLine().Trim();
             } while (nome == "");
 
-            cadastros.codigos[1]++;
-            SalvarCodigos();
-            string cod = "" + cadastros.codigos[1];
-
-            MPrima mPrima = new MPrima(cod, nome);
-
-            banco.InserirMateriaPrimaBD(mPrima);
-
-            return mPrima;
+            return materiaPrimaRepository.Add(new MPrima(nome));
 
         }
         public string CadastroInadimplente()
         {
-            string inadimplente;
+            string cpf;
             Console.Clear();
             Console.WriteLine("\n\t\t\t\t\t===========CADASTRO DE INADIMPLENTE===========");
             do
             {
                 Console.Write("\t\t\t\t\tDigite o cpf do inadimplente: ");
-                inadimplente = Console.ReadLine().Trim().Replace(".", "").Replace("-", ""); ;
-                if (!ValidaCpf(inadimplente))//valida cpf
+                cpf = Console.ReadLine().Trim().Replace(".", "").Replace("-", ""); ;
+                if (!ValidaCpf(cpf))//valida cpf
                     Console.WriteLine("\t\t\t\t\tCpf invalido!\nDigite novamente");
-            } while (!ValidaCpf(inadimplente));
-            if (cadastros.inadimplentes.Find(p => p == "" + inadimplente) != null)
+            } while (!ValidaCpf(cpf));
+            if (clienteRepository.ClienteBloqueado(cpf))
             {
                 Console.WriteLine("\t\t\t\t\tInadimplente com esse CPF ja existe");
                 return null;
             }
-            string cpf = inadimplente;
 
-            if (cadastros.clientes.Find(p => p.CPF == cpf) != null)
+            if (clienteRepository.GetByCPF(cpf) != null)
             {
-                
+                clienteRepository.BloquearCliente(cpf);
+                Console.WriteLine("\t\t\t\t\tCliente adicionado a lista de Inadimplente");
                 return cpf;
             }
-            banco.InserirClienteInadimplente(cpf);
+            else
+            {
+                Console.WriteLine("\t\t\t\t\tCliente não encontrado");
+            }
             return null;
         }
         public string CadastroBloqueado()
         {
-            string bloqueado;
+            string cnpj;
             Console.Clear();
             Console.WriteLine("\n\t\t\t\t\t===========CADASTRO DE BLOQUEADO===========");
             do
             {
                 Console.Write("\t\t\t\t\tDigite o CNPJ do fornecedor: ");
-                bloqueado = Console.ReadLine().Trim().Replace(".", "").Replace("-", "").Replace("/", "");
-                if (!ValidaCnpj(bloqueado))//valida cpf
+                cnpj = Console.ReadLine().Trim().Replace(".", "").Replace("-", "").Replace("/", "");
+                if (!ValidaCnpj(cnpj))//valida cpf
                     Console.WriteLine("\t\t\t\t\tCnpj invalido!\nDigite novamente");
-            } while (!ValidaCnpj(bloqueado));
-            if (cadastros.bloqueados.Find(p => p == bloqueado) != null)
+            } while (!ValidaCnpj(cnpj));
+            if (fornecedorRepository.FornecedorBloqueado(cnpj))
             {
                 Console.WriteLine("\t\t\t\t\tFornecedor com esse cnpj ja existe");
                 return null;
             }
 
-            string cnpj = bloqueado;
 
-            if (cadastros.fornecedores.Find(p => p.CNPJ == cnpj) != null)
+            if (fornecedorRepository.GetByCNPJ(cnpj) != null)
             {
-                new Controle(cnpj);
-                cadastros.bloqueados.Add("" + cnpj);
+                fornecedorRepository.BloquearFornecedor(cnpj);
+                Console.WriteLine("\t\t\t\t\tFornecedor adicionado a lista de Inadimplente");
                 return cnpj;
             }
+            else
+            {
+                Console.WriteLine("\t\t\t\t\tFornecedor não encontrado");
+            }
+
             return null;
         }
 
@@ -388,83 +389,34 @@ namespace BILTIFUL.Core
                     Console.WriteLine("\t\t\t\t\tCpf invalido!\n\t\t\t\t\tDigite novamente");
             } while (!ValidaCpf(inadimplente));
 
-            string cpf = inadimplente;
-
-            if (banco.VerificarClienteInadimplente(cpf))
+            if (clienteRepository.ClienteBloqueado(inadimplente))
             {
-                banco.RemoverClienteInadimplente(cpf);
-                Console.WriteLine($"\t\t\t\tCPF: {cpf} removido inadimplente!!");
-                Console.ReadKey();
+                clienteRepository.DesbloquearCliente(inadimplente);
+                Console.WriteLine("\t\t\t\t\tCpf Liberado");
             }
-            else
-            {
-                Console.WriteLine($"\t\t\t\tCPF: {cpf} não é inadimplente!!");
-                Console.ReadKey();
-            }
-
-
 
         }
         public void RemoverBloqueio()
         {
-            string bloqueado;
+            string cnpj;
             Console.Clear();
             Console.WriteLine("\n\t\t\t\t\t===========REMOVER DE BLOQUEADO===========");
             do
             {
                 Console.Write("\t\t\t\t\tDigite o cnpj do fornecedor bloqueado: ");
-                bloqueado = Console.ReadLine().Trim().Replace(".", "").Replace("-", "").Replace("/", "");
-                if (!ValidaCnpj(bloqueado))//valida cpf
+                cnpj = Console.ReadLine().Trim().Replace(".", "").Replace("-", "").Replace("/", "");
+                if (!ValidaCnpj(cnpj))//valida cpf
                     Console.WriteLine("\t\t\t\t\tCpf invalido!\n\t\t\t\t\tDigite novamente");
-            } while (!ValidaCnpj(bloqueado));
+            } while (!ValidaCnpj(cnpj));
 
-            long cnpj = long.Parse(bloqueado);
-
-            if (cadastros.bloqueados.Find(p => p == "" + cnpj) != null)
-                Remover(cnpj);
-        }
-        public void Remover(long chave)
-        {
-            string schave = "" + chave;
-            if (CadastroService.ValidaCpf(schave))
+            if (fornecedorRepository.FornecedorBloqueado(cnpj))
             {
-                cadastros.inadimplentes.Remove(schave);
-                try//envia cliente para arquivo como novo cliente]try
-                {
-                    int i = 0;
-                    StreamWriter sw = new StreamWriter("Arquivos\\Risco.dat");
-                    while (i != cadastros.inadimplentes.Count)
-                    {
-                        sw.WriteLine(cadastros.inadimplentes[i]);
-                        i++;
-                    }
-                    sw.Close();
-                    Console.WriteLine("\t\t\t\t\tCliente removido dos inadimplentes!");
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("Exception: " + e.Message);
-                }
+                fornecedorRepository.DesbloquearFornecedor(cnpj);
+                Console.WriteLine("\t\t\t\t\tCNPJ Liberado");
             }
-            if (CadastroService.ValidaCnpj(schave))
+            else
             {
-                cadastros.bloqueados.Remove(schave);
-                try//envia cliente para arquivo como novo cliente]try
-                {
-                    int i = 0;
-                    StreamWriter sw = new StreamWriter("Arquivos\\Bloqueado.dat");
-                    while (i != cadastros.bloqueados.Count)
-                    {
-                        sw.WriteLine(cadastros.bloqueados[i]);
-                        i++;
-                    }
-                    sw.Close();
-                    Console.WriteLine("\t\t\t\t\tFornecedor desbloqueado!!");
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine("Exception: " + e.Message);
-                }
+                Console.WriteLine("\t\t\t\t\tFornecedor já esta desbloqueado ou não existe");
             }
         }
 
@@ -490,46 +442,46 @@ namespace BILTIFUL.Core
                 switch (opc)
                 {
                     case "1":
-                    /*    if (cadastros.clientes.Count() != 0)*/
-                            banco.ExibirRegistroClientes();
-/*                        else
-                            Console.WriteLine("\t\t\t\t\tNenhum cliente registrado");*/
+                        if (clienteRepository.Count() != 0)
+                            new Registros(clienteRepository.GetAllClientes());
+                        else
+                            Console.WriteLine("\t\t\t\t\tNenhum cliente registrado");
                         break;
                     case "2":
-                        /*if (cadastros.fornecedores.Count() != 0)*/
-                            banco.ExibirRegistroFornecedor();
-/*                        else
-                            Console.WriteLine("\t\t\t\t\tNenhum fornecedor registrado");*/
+                        if (fornecedorRepository.Count() != 0)
+                            new Registros(fornecedorRepository.GetAllFornecedores());
+                        else
+                            Console.WriteLine("\t\t\t\t\tNenhum fornecedor registrado");
                         break;
                     case "3":
-                        /*if (cadastros.materiasprimas.Count() != 0)*/
-                        banco.ExibirRegistroMateriaPrima();
-/*                        else
-                            Console.WriteLine("\t\t\t\t\tNenhuma materia prima registrada");*/
+                        if (materiaPrimaRepository.Count() != 0)
+                            new Registros(materiaPrimaRepository.GetAllMPrimas());
+                        else
+                            Console.WriteLine("\t\t\t\t\tNenhuma materia prima registrada");
                         break;
                     case "4":
-                      /*  if (cadastros.produtos.Count() != 0)*/
-                            banco.ExibirRegistroProduto();
-/*                        else
-                            Console.WriteLine("\t\t\t\t\tNenhum produto registrado");*/
+                        if (produtoRepository.Count() != 0)
+                            new Registros(produtoRepository.GetAllProdutos());
+                        else
+                            Console.WriteLine("\t\t\t\t\tNenhum produto registrado");
                         break;
                     case "5":
-                        if (cadastros.vendas.Count() != 0)
-                            new Registros(cadastros.vendas, cadastros.itensvenda);
+                        /*if (vendaRepository.Count() != 0)
+                            new Registros(vendaRepository.vendas, cadastros.itensvenda);
                         else
-                            Console.WriteLine("\t\t\t\t\tNenhuma venda registrada");
+                            Console.WriteLine("\t\t\t\t\tNenhuma venda registrada");*/
                         break;
                     case "6":
-                        if (cadastros.compras.Count() != 0)
-                            new Registros(cadastros.compras, cadastros.itenscompra);
+                        if (compraRepository.Count() != 0)
+                            new Registros(compraRepository.GetAllCompras(), itemCompraRepository.GetAllItensCompra());
                         else
                             Console.WriteLine("\t\t\t\t\tNenhum produto registrado");
                         break;
                     case "7":
-                        if (cadastros.producao.Count() != 0)
-                            new Registros(cadastros.producao, cadastros.itensproducao);
-                        else
-                            Console.WriteLine("\t\t\t\t\tNenhum produto registrado");
+                        /* if (producaoRepository.Count() != 0)
+                             new Registros(producaoRepository.GetAllProducoes(), cadastros.itensproducao);
+                         else
+                             Console.WriteLine("\t\t\t\t\tNenhum produto registrado");*/
                         break;
                     case "0":
 
@@ -561,11 +513,12 @@ namespace BILTIFUL.Core
                               "\t\t\t\t\t|Opção: ");
                 opc = Console.ReadLine();
                 bool encontrado = false;
-                Console.Clear();
+
                 switch (opc)
                 {
 
                     case "1":
+                        Console.Clear();
                         string cpf;
                         do
                         {
@@ -576,102 +529,141 @@ namespace BILTIFUL.Core
                                 Console.WriteLine("\t\t\t\t\tCPF INVÁLIDO, TENTE NOVAMENTE!");
                             }
                         } while (ValidaCpf(cpf) != true);
-                        Console.Clear();
 
-                        banco.LocalizarCliente(cpf);
+                        Cliente localizarcliente = clienteRepository.SearchClientes(p => p.CPF == (cpf))[0];
+                        if (localizarcliente != null)
+                        {
+                            encontrado = true;
+                            Console.WriteLine(localizarcliente.Dados());
+                        }
+                        BackSubMenuLocalizar();
                         break;
                     case "2":
+                        Console.Clear();
                         string cnpj;
                         do
                         {
                             Console.Write("\t\t\t\t\tDigite o cnpj que deseja localizar: ");
-                            cnpj = Console.ReadLine().Trim().Replace(".", "").Replace("-", "").Replace("/", "");                            
+                            cnpj = Console.ReadLine().Trim().Replace(".", "").Replace("-", "").Replace("/", "");
                             if (!ValidaCnpj(cnpj))
                             {
                                 Console.WriteLine("\t\t\t\t\tCNPJ INVÁLIDO, TENTE NOVAMENTE!");
                             }
                         } while (ValidaCnpj(cnpj) != true);
                         Console.Clear();
-                        banco.LocalizarFornecedor(cnpj);
+
+                        Fornecedor localizarfornecedor = fornecedorRepository.SearchFornecedores(p => p.CNPJ == cnpj)[0];
+                        if (localizarfornecedor != null)
+                        {
+                            encontrado = true;
+                            Console.WriteLine(localizarfornecedor.Dados());
+                        }
+                        BackSubMenuLocalizar();
                         break;
                     case "3":
-                        Console.Write("\t\t\t\t\tDigite o nome da matéria prima que deseja localizar: ");
-                        decimal nomeMateriaPrima = decimal.Parse(Console.ReadLine());
-                        banco.LocalizarMateriaPrima(nomeMateriaPrima);
-                        Console.ReadKey();
+                        Console.Clear();
+                        Console.Write("\t\t\t\t\tDigite o nome que deseja localizar: ");
+                        string nomeMateriaPrima = Console.ReadLine().Trim().ToLower();
+                        List<MPrima> localizarmprima = materiaPrimaRepository.GetByNome(nomeMateriaPrima);
+                        if (localizarmprima != null)
+                        {
+                            encontrado = true;
+                            localizarmprima.ForEach(p => Console.WriteLine(p.Dados()));
+                        }
+                        BackSubMenuLocalizar();
                         break;
                     case "4":
-                        Console.Write("\t\t\t\t\tDigite o codigo de barra do produto que deseja localizar: ");
-                        string codProduto = Console.ReadLine();
-                        banco.LocalizarProduto(codProduto);
+                        Console.Clear();
+                        Console.Write("\t\t\t\t\tDigite o nome do produto que deseja localizar: ");
+                        string nomeProduto = Console.ReadLine().Trim().ToLower();
+                        List<Produto> localizaProduto = produtoRepository.GetByNome(nomeProduto);
+                        if (localizaProduto != null)
+                        {
+                            encontrado = true;
+                            localizaProduto.ForEach(p => Console.WriteLine(p.DadosProduto()));
+                        }
+                        BackSubMenuLocalizar();
                         break;
                     case "5":
+                        Console.Clear();
                         Console.Write("\t\t\t\t\tDigite a data de venda que deseja localizar(dd/mm/aaaa): ");
                         DateTime dvenda = DateTime.Parse(Console.ReadLine());
-                        List<Venda> localizavenda = cadastros.vendas.FindAll(p => p.DataVenda == dvenda);
+                        List<Venda> localizavenda = vendaRepository.GetByData(dvenda);
                         if (localizavenda != null)
                         {
                             encontrado = true;
                             foreach (Venda p in localizavenda)
                             {
-                                Console.WriteLine(p.DadosVenda());
-                                Console.WriteLine("\t\t\t\t\tItens: ");
-                                foreach (ItemVenda i in cadastros.itensvenda)
+                                Console.WriteLine(p.Dados());
+                                foreach (ItemVenda i in itemVendaRepository.GetById(p.Id))
                                 {
+                                    Console.WriteLine("Itens: ");
                                     if (i.Id == p.Id)
-                                        Console.WriteLine(i.DadosItemVenda());
+                                        Console.WriteLine(i.Dados());
                                 }
                             }
                         }
+                        BackSubMenuLocalizar();
                         break;
                     case "6":
+                        Console.Clear();
                         Console.Write("\t\t\t\t\tDigite o data de compra que deseja localizar(dd/mm/aaaa): ");
                         DateTime dcompra = DateTime.Parse(Console.ReadLine());
-                        List<Compra> localizacompra = cadastros.compras.FindAll(p => p.DataCompra == dcompra);
+                        List<Compra> localizacompra = compraRepository.GetByData(dcompra);
                         if (localizacompra != null)
                         {
                             encontrado = true;
                             foreach (Compra p in localizacompra)
                             {
-                                Console.WriteLine(p.DadosCompra());
-                                Console.WriteLine("\t\t\t\t\tItens: ");
-                                foreach (ItemCompra i in cadastros.itenscompra)
+                                Console.WriteLine(p.Dados());
+                                foreach (ItemCompra i in itemCompraRepository.GetById(p.Id))
                                 {
+                                Console.WriteLine("Itens: ");
                                     if (i.Id == p.Id)
-                                        Console.WriteLine(i.DadosItemCompra());
+                                        Console.WriteLine(i.Dados());
                                 }
                             }
                         }
+                        BackSubMenuLocalizar();
                         break;
                     case "7":
+                        Console.Clear();
                         Console.Write("\t\t\t\t\tDigite o data de produção que deseja localizar(dd/mm/aaaa): ");
                         DateTime dproducao = DateTime.Parse(Console.ReadLine());
-                        List<Producao> localizaproducao = cadastros.producao.FindAll(p => p.DataProducao == dproducao);
+                        List<Producao> localizaproducao = producaoRepository.GetByData(dproducao);
                         if (localizaproducao != null)
                         {
                             encontrado = true;
                             foreach (Producao p in localizaproducao)
                             {
                                 Console.WriteLine(p.DadosProducao());
-                                Console.WriteLine("\t\t\t\t\tItens: ");
-                                foreach (ItemProducao i in cadastros.itensproducao)
+                                foreach (ItemProducao i in itemProducaoRepository.GetById(p.Id))
                                 {
+                                Console.WriteLine("Itens: ");
                                     if (i.Id == p.Id)
-                                        Console.WriteLine(i.DadosItemProducao());
+                                        Console.WriteLine(i.Dados());
                                 }
                             }
                         }
+                        BackSubMenuLocalizar();
                         break;
                     case "0":
                         break;
                     default:
-                        Console.WriteLine("\t\t\t\t\tOpção invalida");
+                        Console.WriteLine("\t\t\t\t\tOpção inválida! ");
+                        Console.ReadKey();
                         break;
                 }
-               /* if (encontrado == false && opc != "0")
-                    Console.WriteLine("\t\t\t\t\tRegistro não encontrado");*/
-                Console.ReadKey();
+                if (encontrado == false && opc != "0")
+                    Console.WriteLine("\t\t\t\t\tRegistro não encontrado");
             } while (opc != "0");
+
+        }
+        public void BackSubMenuLocalizar()
+        {
+            Console.WriteLine("\n\t\t\t Pressione qualquer tecla para voltar ao menu de Localizar...");
+            Console.ReadKey();
+            Console.Clear();
         }
     }
 }

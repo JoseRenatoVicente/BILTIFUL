@@ -1,61 +1,73 @@
+using BILTIFUL.Core.Entidades.Base;
 using BILTIFUL.Core.Entidades.Enums;
 using System;
 using System.Globalization;
 
 namespace BILTIFUL.Core.Entidades
 {
-    public class Produto
+    public class Produto : IEntidadeDataBase<Produto>
     {
-        public string CodigoBarras { get; set; } = "7896617";
+        public long CodigoBarras { get; set; } 
         public string Nome { get; set; }
-        public string ValorVenda { get; set; }
+        public float ValorVenda { get; set; }
         public DateTime UltimaVenda { get; set; } = DateTime.Now;
         public DateTime DataCadastro { get; set; } = DateTime.Now;
         public Situacao Situacao { get; set; } = Situacao.Ativo;
+        public float QuantidadeEstoque { get; set; }
 
         public Produto()
         {
         }
 
-
-        public Produto(string cbarras, string nome, string vvenda)
+        public Produto(string nome, float valorVenda)
         {
-            this.CodigoBarras += cbarras.PadLeft(5,'0');
-            this.Nome = nome;
-            this.ValorVenda = vvenda.PadLeft(5, '0');
+            Nome = nome;
+            ValorVenda = valorVenda;
         }
 
-        public Produto(string cbarras, string nome, string vvenda, DateTime uvenda, DateTime dcadastro, Situacao situacao)
+        public void RetirarEstoque(int quantidade)
         {
-            this.CodigoBarras = cbarras;
-            this.Nome = nome;
-            this.ValorVenda = vvenda;
-            this.UltimaVenda = uvenda;
-            this.DataCadastro = dcadastro;
-            this.Situacao = situacao;
+            if (QuantidadeEstoque >= quantidade)
+            {
+                QuantidadeEstoque -= quantidade;
+            }
         }
-        public string ExibirProd()
-        {   
+
+        public bool EstaDisponivel(int quantidade)
+        {
+            return QuantidadeEstoque >= quantidade;
+        }
+
+        public string Dados()
+        {
             return $"\n\t\t\t\t\t----------------------------\n" +
                    $"\n\t\t\t\t\tCod. Barra: {CodigoBarras}\n" +
                    $"\t\t\t\t\tNome: {Nome}\n" +
-                   $"\t\t\t\t\tValor Unitário: R$ {float.Parse(ValorVenda.Insert(3, ","))}\n"+
-                   $"\n\t\t\t\t\t----------------------------\n" ;
+                   $"\t\t\t\t\tValor Unitário: R$ {ValorVenda}\n" +
+                   $"\n\t\t\t\t\t----------------------------\n";
         }
 
-        public string ConverterParaEDI()
+        public string ConverterParaDAT()
         {
-            return $"{CodigoBarras}{Nome.PadRight(20).Substring(0, 20)}{ValorVenda.PadLeft(5,'0')}{UltimaVenda.ToString("dd/MM/yyyy")}{DataCadastro.ToString("dd/MM/yyyy")}{(char)Situacao}";
+            return $"{CodigoBarras}{Nome.PadRight(20).Substring(0, 20)}{ValorVenda.ToString().PadLeft(5, '0')}{UltimaVenda.ToString("dd/MM/yyyy")}{DataCadastro.ToString("dd/MM/yyyy")}{(char)Situacao}";
         }
+
         public string DadosProduto()
         {
-            return "\n\t\t\t-------------------------------------------\n" +
-                "\t\t\tCodigo de barras: " + CodigoBarras + "\n" +
-                "\t\t\tNome: " + Nome + "\n" +
-                "\t\t\tValor venda: " + string.Format(CultureInfo.GetCultureInfo("pt-BR"), " {0:C}", float.Parse(ValorVenda.Insert(3,","))) + "\n" +
-                "\t\t\tData de ultima venda: " + UltimaVenda.ToString("dd/MM/yyyy") + "\n" +
-                "\t\t\tData de cadastro: " + DataCadastro.ToString("dd/MM/yyyy") + "\n" +
-                "\t\t\tSituação: " + Situacao;
+            return "-------------------------------------------\nCodigo de barras: " + CodigoBarras + "\nNome: " + Nome + "\nValor venda: " + string.Format(CultureInfo.GetCultureInfo("pt-BR"), " {0:C}", ValorVenda) + "\nData de ultima venda: " + UltimaVenda.ToString("dd/MM/yyyy") + "\nData de cadastro: " + DataCadastro.ToString("dd/MM/yyyy") + "\nSituação: " + Situacao;
+        }
+
+        public Produto ExtrairDados(string line)
+        {
+            if (line == null) return null;
+
+            Nome = line.Substring(5, 20).Trim();
+            ValorVenda = float.Parse(line.Substring(30, 10));
+            UltimaVenda = DateTime.Parse(line.Substring(40, 10));
+            DataCadastro = DateTime.Parse(line.Substring(50, 10));
+            Situacao = (Situacao)char.Parse(line.Substring(60, 1));
+
+            return this;
         }
     }
 }

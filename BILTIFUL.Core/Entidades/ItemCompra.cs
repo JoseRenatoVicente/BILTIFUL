@@ -3,45 +3,45 @@ using System;
 
 namespace BILTIFUL.Core.Entidades
 {
-    public class ItemCompra : EntidadeBase
+    public class ItemCompra : EntidadeBase, IEntidadeDataBase<ItemCompra>
     {
         public DateTime DataCompra { get; set; } = DateTime.Now;
         //ID materia prima
         public string MateriaPrima { get; set; }
-        public string Quantidade { get; set; }
-        public string ValorUnitario { get; set; }
-        public string TotalItem { get; set; }
+        public float Quantidade { get; set; }
+        public float ValorUnitario { get; set; }
+        public float TotalItem => Quantidade * ValorUnitario;
 
         public ItemCompra()
         {
         }
 
-        public ItemCompra(string id,string materiaPrima, string quantidade, string valorUnitario,string totalitem)
+        public ItemCompra(string materiaPrima, float quantidade, float valorUnitario)
         {
-            Id = id.PadLeft(5,'0');
-            MateriaPrima = materiaPrima;
-            Quantidade = quantidade.PadLeft(5,'0');
-            ValorUnitario = valorUnitario.PadLeft(5, '0');
-            TotalItem = totalitem.PadLeft(6,'0');
-        }
-
-        public ItemCompra(string id, DateTime dataCompra, string materiaPrima, string quantidade, string valorUnitario, string totalItem)
-        {
-            Id = id;
-            DataCompra = dataCompra;
             MateriaPrima = materiaPrima;
             Quantidade = quantidade;
             ValorUnitario = valorUnitario;
-            TotalItem = totalItem;
         }
 
-        public string ConverterParaEDI()
+        public string ConverterParaDAT()
         {
             return $"{Id}{DataCompra.ToString("dd/MM/yyyy")}{MateriaPrima}{Quantidade}{ValorUnitario}{TotalItem}";
         }
-        public string DadosItemCompra()
+        public string Dados()
         {
-            return $"\t\t\t\t\tMateria prima: {MateriaPrima}\n\t\t\t\t\tQuantidade: {float.Parse(Quantidade.Insert(3, ","))}\n\t\t\t\t\tValor unitario: {float.Parse(ValorUnitario.Insert(3, ","))}\n\t\t\t\t\tTotal: {float.Parse(TotalItem.Insert(4, ","))}\n\t\t\t\t\t-------------------------------------------";
+            return $"\t\t\t\t\tMateria prima: {MateriaPrima}\n\t\t\t\t\tQuantidade: {Quantidade}\n\t\t\t\t\tValor unitario: {ValorUnitario}\n\t\t\t\t\tTotal: {TotalItem}\n\t\t\t\t\t-------------------------------------------";
+        }
+
+        public ItemCompra ExtrairDados(string line)
+        {
+            if (line == null) return null;
+
+            Id = int.Parse(line.Substring(0, 5));
+            DataCompra = DateTime.Parse(line.Substring(5, 10));
+            Quantidade = int.Parse(line.Substring(21, 5));
+            ValorUnitario = float.Parse(line.Substring(26, 5));
+
+            return this;
         }
     }
 }

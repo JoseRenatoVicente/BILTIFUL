@@ -1,27 +1,20 @@
-﻿using BILTIFUL.Core.Controles;
-using BILTIFUL.ModuloCompra;
-using BILTIFUL.ModuloProducao;
-using BILTIFUL.ModuloVenda;
-using BILTIFUL.Core;
+﻿using BILTIFUL.Application.Service;
 using System;
+using System.Globalization;
 
 namespace BILTIFUL
 {
     public class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
-            
+            CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("pt-BR");
+
             Menu();
         }
 
         public static void Menu()
         {
-            ProducaoService producaoService = new ProducaoService();
-            VendaService vendaService = new VendaService();
-            CompraService compraService = new CompraService();
-            CadastroService cadastroService = new CadastroService();
-
             Console.Clear();
             Console.WriteLine("\n\t\t\t\t\t __________________________________________________");
             Console.WriteLine("\t\t\t\t\t|+++++++++++++++++++| BILTIFUL |+++++++++++++++++++|");
@@ -32,7 +25,6 @@ namespace BILTIFUL
             Console.WriteLine("\t\t\t\t\t|0| - SAIR                                         |");
             Console.Write("\t\t\t\t\t|__________________________________________________|\n" +
                           "\t\t\t\t\t|Opção: ");
-            
 
             string option = Console.ReadLine();
 
@@ -42,25 +34,25 @@ namespace BILTIFUL
 
                 case "1":
                     Console.Clear();
-                    producaoService.SubMenu();
+                    new ProducaoService().SubMenu();
                     BackMenu();
                     break;
 
                 case "2":
                     Console.Clear();
-                    compraService.SubMenu();
+                    new CompraService().SubMenu();
                     BackMenu();
                     break;
 
                 case "3":
                     Console.Clear();
-                    vendaService.SubMenu();
+                    new VendaService().SubMenu();
                     BackMenu();
                     break;
 
                 case "4":
                     Console.Clear();
-                    cadastroService.SubMenu();
+                    new CadastroService().SubMenu();
                     BackMenu();
                     break;
 
@@ -69,9 +61,7 @@ namespace BILTIFUL
                     BackMenu();
                     break;
             }
-
         }
-
         public static void BackMenu()
         {
             Console.WriteLine("\n\t\t\t\t Pressione qualquer tecla para voltar ao menu principal...");
