@@ -1,6 +1,5 @@
 create database BILTIFUL;
 use BILTIFUL;
-drop database BILTIFUL;
 
 create table Cliente(
 cpf varchar(11) not null,
