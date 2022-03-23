@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace BILTIFUL.Core.Entidades
 {
-    public class Compra : EntidadeBase, IEntidadeDAT<Compra>
+    public class Compra : EntidadeBase, IEntidadeDataBase<Compra>
     {
         public DateTime DataCompra { get; set; } = DateTime.Now;
         //CNPJ
@@ -16,6 +16,12 @@ namespace BILTIFUL.Core.Entidades
 
         }
 
+        public Compra(string fornecedor, float valorTotal)
+        {
+            Fornecedor = fornecedor;
+            ValorTotal = valorTotal;
+        }
+
         public string ConverterParaDAT()
         {
             return $"{Id}{DataCompra.ToString("dd/MM/yyyy")}{Fornecedor}{ValorTotal}";
@@ -25,7 +31,7 @@ namespace BILTIFUL.Core.Entidades
             return "\t\t\t\t\t-------------------------------------------\n\t\t\t\t\tId: " + Id + "\n\t\t\t\t\tData de compra: " + DataCompra.ToString("dd/MM/yyyy") + "\n\t\t\t\t\tFornecedor: " + Fornecedor + "\n\t\t\t\t\tValor da compra: " + ValorTotal;
         }
 
-        public Compra ExtrairDAT(string line)
+        public Compra ExtrairDados(string line)
         {
             if (line == null) return null;
 

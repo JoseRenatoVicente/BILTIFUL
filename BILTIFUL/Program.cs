@@ -1,5 +1,6 @@
 ﻿using BILTIFUL.Application.Service;
 using System;
+using System.Globalization;
 
 namespace BILTIFUL
 {
@@ -7,6 +8,58 @@ namespace BILTIFUL
     {
         private static void Main(string[] args)
         {
+            CultureInfo.DefaultThreadCurrentCulture = new CultureInfo("pt-BR");
+
+            Menu();
+
+            /*ProdutoRepository produtoRepository = new ProdutoRepository();
+            MateriaPrimaRepository materiaPrimaRepository = new MateriaPrimaRepository();
+            FornecedorRepository fornecedorRepository = new FornecedorRepository();
+            ClienteRepository clienteRepository = new ClienteRepository();
+
+            produtoRepository.GetAllProdutos();
+
+            Produto produto = new Produto { CodigoBarras = 789661700005, Nome = "Produto1", ValorVenda = 10, Situacao = Situacao.Ativo, QuantidadeEstoque = 1 };
+
+            produtoRepository.Add(produto);
+            produto.Nome = "produto editado";
+
+            produtoRepository.Update(produto);
+
+            produtoRepository.Remove(produto.CodigoBarras);
+
+            materiaPrimaRepository.GetAllMPrimas();
+
+            MPrima mPrima = new MPrima { Nome="Glicerina"};
+
+            materiaPrimaRepository.Add(mPrima);
+            mPrima.Nome = "Batom";
+
+            materiaPrimaRepository.Update(mPrima);
+
+            materiaPrimaRepository.Remove("MP0001");*/
+
+            /*Fornecedor fornecedor = new Fornecedor { CNPJ = "112121", RazaoSocial = "Empresa 1", DataAbertura=DateTime.Now};
+            fornecedorRepository.Add(fornecedor);
+            fornecedor.RazaoSocial = "Empresa editada";
+
+            fornecedorRepository.Update(fornecedor);
+
+            fornecedorRepository.Remove("112121");*/
+
+            /*Cliente cliente = new Cliente { Nome = "Jose", CPF = "11121213", DataNascimento = DateTime.Parse("2004/03/22") };
+            clienteRepository.GetAllClientes();
+
+            clienteRepository.Add(cliente);
+            cliente.Nome = "Cliente editado";
+
+            clienteRepository.GetAllClientes();
+
+            clienteRepository.Update(cliente);
+
+            clienteRepository.Remove(cliente.CPF);*/
+
+
 
             /*Repository<MPrima> repository = new Repository<MPrima>("MPrima.dat");
 
@@ -19,7 +72,7 @@ namespace BILTIFUL
 
             Console.ReadKey();*/
 
-            Menu();
+            ;
         }
 
         public static void Menu()
@@ -34,7 +87,6 @@ namespace BILTIFUL
             Console.WriteLine("\t\t\t\t\t|0| - SAIR                                         |");
             Console.Write("\t\t\t\t\t|__________________________________________________|\n" +
                           "\t\t\t\t\t|Opção: ");
-
 
             string option = Console.ReadLine();
 
@@ -69,12 +121,7 @@ namespace BILTIFUL
                     BackMenu();
                     break;
             }
-
         }
-
-
-
-
         public static void BackMenu()
         {
             Console.WriteLine("\n\t\t\t\t Pressione qualquer tecla para voltar ao menu principal...");

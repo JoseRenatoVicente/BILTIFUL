@@ -3,7 +3,7 @@ using System;
 
 namespace BILTIFUL.Core.Entidades
 {
-    public class Risco : IEntidadeDAT<Risco>
+    public class Risco : IEntidadeDataBase<Risco>
     {
         public string CPF { get; set; }
 
@@ -17,7 +17,7 @@ namespace BILTIFUL.Core.Entidades
             throw new NotImplementedException();
         }
 
-        public Risco ExtrairDAT(string line)
+        public Risco ExtrairDados(string line)
         {
             CPF = line;
             return line != null ? this : null;

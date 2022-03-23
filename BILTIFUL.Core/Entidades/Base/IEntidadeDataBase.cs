@@ -1,9 +1,9 @@
 ﻿namespace BILTIFUL.Core.Entidades.Base
 {
-    public interface IEntidadeDAT<TEntity>
+    public interface IEntidadeDataBase<TEntity>
     {
         public string ConverterParaDAT();
         public string Dados();
-        public TEntity ExtrairDAT(string line);
+        public TEntity ExtrairDados(string line);
     }
 }

@@ -3,7 +3,7 @@ using System;
 
 namespace BILTIFUL.Core.Entidades
 {
-    public class Bloqueado : IEntidadeDAT<Bloqueado>
+    public class Bloqueado : IEntidadeDataBase<Bloqueado>
     {
         public string CNPJ { get; set; }
 
@@ -17,7 +17,7 @@ namespace BILTIFUL.Core.Entidades
             throw new NotImplementedException();
         }
 
-        public Bloqueado ExtrairDAT(string line)
+        public Bloqueado ExtrairDados(string line)
         {
             CNPJ = line;
             return line != null ? this : null;

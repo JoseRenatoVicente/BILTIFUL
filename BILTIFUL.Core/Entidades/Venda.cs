@@ -3,11 +3,11 @@ using System;
 
 namespace BILTIFUL.Core.Entidades
 {
-    public class Venda : EntidadeBase, IEntidadeDAT<Venda>
+    public class Venda : EntidadeBase, IEntidadeDataBase<Venda>
     {
         public DateTime DataVenda { get; set; } = DateTime.Now;
         //CPF
-        public int Cliente { get; set; }
+        public string Cliente { get; set; }
         public float ValorTotal { get; set; }
 
         public Venda()
@@ -30,13 +30,13 @@ namespace BILTIFUL.Core.Entidades
                    $"\n\t\t\t\t\tValor Total: {ValorTotal}";
         }
 
-        public Venda ExtrairDAT(string line)
+        public Venda ExtrairDados(string line)
         {
             if (line == null) return null;
 
             Id = int.Parse(line.Substring(0, 5));
             DataVenda = DateTime.Parse(line.Substring(5, 10));
-            Cliente = int.Parse(line.Substring(15, 11));
+            Cliente = line.Substring(15, 11);
             ValorTotal = int.Parse(line.Substring(26, 7));
 
             return this;

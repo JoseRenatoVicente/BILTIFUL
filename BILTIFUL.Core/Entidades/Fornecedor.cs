@@ -4,7 +4,7 @@ using System;
 
 namespace BILTIFUL.Core.Entidades
 {
-    public class Fornecedor : IEntidadeDAT<Fornecedor>
+    public class Fornecedor : IEntidadeDataBase<Fornecedor>
     {
         public string CNPJ { get; set; }
         public string RazaoSocial { get; set; }
@@ -17,6 +17,12 @@ namespace BILTIFUL.Core.Entidades
         {
         }
 
+        public Fornecedor(string cNPJ, string razaoSocial, DateTime dataAbertura)
+        {
+            CNPJ = cNPJ;
+            RazaoSocial = razaoSocial;
+            DataAbertura = dataAbertura;
+        }
 
         public string DadosFornecedorCompra()
         {
@@ -32,7 +38,7 @@ namespace BILTIFUL.Core.Entidades
             return "-------------------------------------------\nRazão social: " + RazaoSocial + "\nCNPJ: " + CNPJ.ToString().PadLeft(14, '0') + "\nData de abertura: " + DataAbertura.ToString("dd/MM/yyyy") + "\nData de ultima compra: " + UltimaCompra.ToString("dd/MM/yyyy") + "\nData de cadastro: " + DataCadastro.ToString("dd/MM/yyyy") + "\nSituação: " + Situacao;
         }
 
-        public Fornecedor ExtrairDAT(string line)
+        public Fornecedor ExtrairDados(string line)
         {
             if (line == null) return null;
 

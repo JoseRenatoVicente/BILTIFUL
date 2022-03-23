@@ -1,16 +1,15 @@
 ﻿using BILTIFUL.Core.Entidades.Base;
 using System;
+using System.Collections.Generic;
 
 namespace BILTIFUL.Core.Entidades
 {
-    public class Producao : EntidadeBase, IEntidadeDAT<Producao>
+    public class Producao : EntidadeBase, IEntidadeDataBase<Producao>
     {
         public DateTime DataProducao { get; set; } = DateTime.Now;
-        //ID produto
-        //public string Produto { get; set; }
-        public int Quantidade { get; set; }
-        public int Produto { get; set; }
-
+        public float Quantidade { get; set; }
+        public long Produto { get; set; }
+        public List<ItemProducao> Itens { get; set; }
         public Producao()
         {
         }
@@ -33,7 +32,7 @@ namespace BILTIFUL.Core.Entidades
             return $"-------------------------------------------\nId: {Id}\nData produção: {DataProducao}\n-------------------------------------------";
         }
 
-        public Producao ExtrairDAT(string line)
+        public Producao ExtrairDados(string line)
         {
             if (line == null) return null;
 

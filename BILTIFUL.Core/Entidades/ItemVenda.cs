@@ -2,10 +2,10 @@
 
 namespace BILTIFUL.Core.Entidades
 {
-    public class ItemVenda : EntidadeBase, IEntidadeDAT<ItemVenda>
+    public class ItemVenda : EntidadeBase, IEntidadeDataBase<ItemVenda>
     {
         //ID produto
-        public int Produto { get; set; }
+        public long Produto { get; set; }
         public float Quantidade { get; set; }
         public int ValorUnitario { get; set; }
         public float TotalItem => Quantidade * ValorUnitario;
@@ -22,7 +22,7 @@ namespace BILTIFUL.Core.Entidades
             return $"-------------------------------------------\nProduto: {Produto}\nQuantidade: {Quantidade}\nValor total: {TotalItem}\n-------------------------------------------";
         }
 
-        public ItemVenda ExtrairDAT(string line)
+        public ItemVenda ExtrairDados(string line)
         {
             if (line == null) return null;
 

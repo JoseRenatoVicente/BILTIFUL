@@ -5,18 +5,24 @@ using System.Globalization;
 
 namespace BILTIFUL.Core.Entidades
 {
-    public class Produto : EntidadeBase, IEntidadeDAT<Produto>
+    public class Produto : IEntidadeDataBase<Produto>
     {
-        public string CodigoBarras => "7896617" + Id.ToString().PadLeft(4, '0');
+        public long CodigoBarras { get; set; } 
         public string Nome { get; set; }
         public float ValorVenda { get; set; }
         public DateTime UltimaVenda { get; set; } = DateTime.Now;
         public DateTime DataCadastro { get; set; } = DateTime.Now;
         public Situacao Situacao { get; set; } = Situacao.Ativo;
-        public int QuantidadeEstoque { get; set; }
+        public float QuantidadeEstoque { get; set; }
 
         public Produto()
         {
+        }
+
+        public Produto(string nome, float valorVenda)
+        {
+            Nome = nome;
+            ValorVenda = valorVenda;
         }
 
         public void RetirarEstoque(int quantidade)
@@ -51,11 +57,10 @@ namespace BILTIFUL.Core.Entidades
             return "-------------------------------------------\nCodigo de barras: " + CodigoBarras + "\nNome: " + Nome + "\nValor venda: " + string.Format(CultureInfo.GetCultureInfo("pt-BR"), " {0:C}", ValorVenda) + "\nData de ultima venda: " + UltimaVenda.ToString("dd/MM/yyyy") + "\nData de cadastro: " + DataCadastro.ToString("dd/MM/yyyy") + "\nSituação: " + Situacao;
         }
 
-        public Produto ExtrairDAT(string line)
+        public Produto ExtrairDados(string line)
         {
             if (line == null) return null;
 
-            Id = int.Parse(line.Substring(0, 5));
             Nome = line.Substring(5, 20).Trim();
             ValorVenda = float.Parse(line.Substring(30, 10));
             UltimaVenda = DateTime.Parse(line.Substring(40, 10));

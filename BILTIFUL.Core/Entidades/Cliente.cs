@@ -4,7 +4,7 @@ using System;
 
 namespace BILTIFUL.Core.Entidades
 {
-    public class Cliente : IEntidadeDAT<Cliente>
+    public class Cliente : IEntidadeDataBase<Cliente>
     {
         public string CPF { get; set; }
         public string Nome { get; set; }
@@ -14,8 +14,18 @@ namespace BILTIFUL.Core.Entidades
         public DateTime DataCadastro { get; set; } = DateTime.Now;
         public Situacao Situacao { get; set; } = Situacao.Ativo;
 
+        public bool Bloqueado { get; set; }
+
         public Cliente()
         {
+        }
+
+        public Cliente(string cPF, string nome, DateTime dataNascimento, Sexo sexo)
+        {
+            CPF = cPF;
+            Nome = nome;
+            DataNascimento = dataNascimento;
+            Sexo = sexo;
         }
 
         public string ConverterParaDAT()
@@ -37,7 +47,7 @@ namespace BILTIFUL.Core.Entidades
                     $"\n\t\t\t\t\t-----------------------------------------";
         }
 
-        public Cliente ExtrairDAT(string line)
+        public Cliente ExtrairDados(string line)
         {
             if (line == null) return null;
 

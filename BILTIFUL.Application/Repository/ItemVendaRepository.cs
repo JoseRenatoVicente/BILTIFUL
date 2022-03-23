@@ -1,13 +1,9 @@
-﻿using BILTIFUL.Application.Repository.Base;
-using BILTIFUL.Core.Entidades;
-
-namespace BILTIFUL.Application.Repository
+﻿namespace BILTIFUL.Application.Repository
 {
-    public class ItemVendaRepository : RepositoryIdDAT<ItemVenda>
+    public class ItemVendaRepository
     {
         public ItemVendaRepository()
         {
-            Path = "Venda.dat";
         }
     }
 }

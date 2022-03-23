@@ -4,8 +4,9 @@ using System;
 
 namespace BILTIFUL.Core.Entidades
 {
-    public class MPrima : EntidadeBase, IEntidadeDAT<MPrima>
+    public class MPrima : EntidadeBase, IEntidadeDataBase<MPrima>
     {
+        public new string Id { get; set; }
         public string Nome { get; set; }
         public DateTime UltimaCompra { get; set; } = DateTime.Now;
         public DateTime DataCadastro { get; set; } = DateTime.Now;
@@ -26,7 +27,7 @@ namespace BILTIFUL.Core.Entidades
             Situacao = situacao;
         }
 
-        public MPrima(int id, string nome, DateTime ucompra, DateTime dcadastro, Situacao situacao)
+        public MPrima(string id, string nome, DateTime ucompra, DateTime dcadastro, Situacao situacao)
         {
             Id = id;
             Nome = nome;
@@ -47,11 +48,11 @@ namespace BILTIFUL.Core.Entidades
 
         }
 
-        public MPrima ExtrairDAT(string line)
+        public MPrima ExtrairDados(string line)
         {
             if (line == null) return null;
 
-            Id = int.Parse(line.Substring(2, 4));
+
             Nome = line.Substring(6, 20).Trim();
             UltimaCompra = DateTime.Parse(line.Substring(26, 10));
             DataCadastro = DateTime.Parse(line.Substring(36, 10));
